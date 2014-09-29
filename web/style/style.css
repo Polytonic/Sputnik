@@ -25,3 +25,11 @@ html, body {
     margin: 10px;
     padding: 10px;
 }
+
+.server-title {
+    font-size: 14pt;
+}
+
+.input-title {
+    font-size: 12pt;
+}
