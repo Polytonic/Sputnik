@@ -26,10 +26,23 @@ html, body {
     padding: 10px;
 }
 
+.server-container-disabled {
+    background-color: #5C5A54;
+}
+
 .server-title {
     font-size: 14pt;
 }
 
 .input-title {
     font-size: 12pt;
+}
+
+input[type="text"].disabled {
+    color: #646464;
+    background-color: #ACACAC;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
