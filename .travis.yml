@@ -1,0 +1,11 @@
+language: python
+python:
+  - "3.4"
+install: pip install -r requirements.txt
+script: echo
+deploy:
+  provider: heroku
+  api_key:
+    secure: BKkRNujx3WJDUYYN9AveUosG3QY8yYa0eg3zhKU+El8O+fWzju1aYK39YRXmkme6oUYgcRQY2TXy7l43LrZQKQ26wpntc75EQNQ4zzXqGfbR7aqS7S6MvEQ+Km4MmIEZyGMD+4wU6xQye3XRbqX0hlhpNp+pw+5439L2s7YvLFw=
+  app:
+    master: iapetus
