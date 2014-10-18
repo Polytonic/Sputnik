@@ -1,25 +1,24 @@
+#! /usr/bin/env python3
+
 import asyncio
 from network import Network
+from server import Server
 
 class Bouncer(object):
 
-    @asyncio.coroutine
-    def add_network(self, hostname, port):
+    def __init__(self, hostname="localhost", port=6667):
 
         loop = asyncio.get_event_loop()
-        yield from loop.create_connection(Network, hostname, port)
-        # yieldloop.run_until_complete(coro)
+        coroutine = loop.create_server(Server, hostname, port)
+        server = loop.run_until_complete(coroutine)
 
-    @asyncio.coroutine
-    def create_component(self, name, bin):
+        print('Serving on {}'.format(server.sockets[0].getsockname()))
+        try: loop.run_forever()
+        except KeyboardInterrupt: pass
 
-        yield from asyncio.create_subprocess_exec(bin, name)
-        print("Spawned Process %s" % name)
+        server.close()
+        loop.run_until_complete(server.wait_closed())
+        loop.close()
 
-    def register_component(self, name, bin="python3"):
-
-        # if length == 1, tokenize
-        # otherwise pass args
-        coroutine = self.create_component(name, bin)
-        self.loop.run_until_complete(coroutine)
-        print("Registered Component %s" % name)
+if __name__ == "__main__":
+    Bouncer()
