@@ -3,9 +3,9 @@ from network import Network
 
 class Server(asyncio.Protocol):
 
-    credentials = {}
-    # def __init__(self):
+    def __init__(self):
 
+        self.credentials = {}
 
     def connection_made(self, transport):
         self.transport = transport

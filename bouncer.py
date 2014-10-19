@@ -6,19 +6,26 @@ from server import Server
 
 class Bouncer(object):
 
-    def __init__(self, hostname="localhost", port=6667):
+    def start(self, hostname="", port=443):
 
         loop = asyncio.get_event_loop()
         coroutine = loop.create_server(Server, hostname, port)
         server = loop.run_until_complete(coroutine)
-
-        print('Serving on {}'.format(server.sockets[0].getsockname()))
+        print("Starting Server")
         try: loop.run_forever()
         except KeyboardInterrupt: pass
+        finally: loop.close()
 
-        server.close()
-        loop.run_until_complete(server.wait_closed())
-        loop.close()
+    # @asyncio.coroutine
+    def add_network(self, hostname, port):
+
+        loop = asyncio.get_event_loop()
+        coro = loop.create_connection(Network, hostname, port)
+        loop.run_until_complete(coro)
 
 if __name__ == "__main__":
-    Bouncer()
+    bouncer = Bouncer()
+    # bouncer.add_network("irc.freenode.net", 6667)
+    # bouncer.add_network("irc.quakenet.org", 6667)
+    # bouncer.add_network("irc.efnet.org", 6667)
+    bouncer.start()
