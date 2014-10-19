@@ -9,6 +9,7 @@ class Server(asyncio.Protocol):
 
     def connection_made(self, transport):
         self.transport = transport
+        self.transport.write("Connection Made".encode())
 
     def data_received(self, data):
         data = data.decode().rstrip()
