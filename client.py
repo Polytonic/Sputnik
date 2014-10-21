@@ -2,9 +2,10 @@ import asyncio
 
 class Client(asyncio.Protocol):
 
-    def __init__(self):
+    def __init__(self, bouncer):
 
-        self.credentials = {}
+        print(bouncer.networks)
+        # bouncer.networks["freenode"].transport.close()
 
     def connection_made(self, transport):
         self.transport = transport

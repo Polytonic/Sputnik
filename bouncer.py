@@ -6,10 +6,17 @@ from client import Client
 
 class Bouncer(object):
 
+    def __init__(self):
+
+        self.clients = dict()
+        self.networks = dict()
+
+
     def start(self, hostname="", port=6667):
 
         loop = asyncio.get_event_loop()
-        coroutine = loop.create_server(Client, hostname, port)
+        coroutine = loop.create_server(lambda: Client(self),
+                                       hostname, port)
         server = loop.run_until_complete(coroutine)
         print("Starting Server")
         try: loop.run_forever()
@@ -20,9 +27,10 @@ class Bouncer(object):
     def add_network(self, hostname, port):
 
         loop = asyncio.get_event_loop()
-        coro = loop.create_connection(
-                    lambda: Network(nickname="Decepticon1337",
-                                    ident="Decepticon1337",
+        coro = loop.create_connection(lambda: Network(self,
+                                    network="freenode",
+                                    nickname="Decepticon1337",
+                                    username="Decepticon1337",
                                     realname="Decepticon1337"),
                                     hostname, port)
         loop.run_until_complete(coro)

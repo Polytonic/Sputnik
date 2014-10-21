@@ -2,20 +2,26 @@ import asyncio
 
 class Network(asyncio.Protocol):
 
-    def __init__(self, nickname, ident, realname, password=None, usermode=0):
+    def __init__(self, bouncer, network, nickname, username, realname,
+                 password=None, usermode=0):
 
-        self.ident = ident
         self.usermode = str(usermode)
+        self.username = username
         self.nickname = nickname
         self.password = password
         self.realname = ":%s" % realname
+
+        self.bouncer, self.network = bouncer, network
+        if self.network in self.bouncer.networks:
+            self.bouncer.networks[self.network].transport.close()
+        self.bouncer.networks[self.network] = self
 
     def connection_made(self, transport):
         self.transport = transport
 
         if self.password: self.send("PASS", self.password)
         self.send("NICK", self.nickname)
-        self.send("USER", self.ident, self.usermode, "*", self.realname)
+        self.send("USER", self.username, self.usermode, "*", self.realname)
 
 
 
@@ -29,7 +35,7 @@ class Network(asyncio.Protocol):
         print(command, message)
 
     def connection_lost(self, exit):
-        print("Client Disconnected")
+        print("Network Disconnected")
 
     def send(self, command, *args):
 
