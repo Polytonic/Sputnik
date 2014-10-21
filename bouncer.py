@@ -2,14 +2,14 @@
 
 import asyncio
 from network import Network
-from server import Server
+from client import Client
 
 class Bouncer(object):
 
     def start(self, hostname="", port=6667):
 
         loop = asyncio.get_event_loop()
-        coroutine = loop.create_server(Server, hostname, port)
+        coroutine = loop.create_server(Client, hostname, port)
         server = loop.run_until_complete(coroutine)
         print("Starting Server")
         try: loop.run_forever()

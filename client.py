@@ -1,7 +1,6 @@
 import asyncio
-from network import Network
 
-class Server(asyncio.Protocol):
+class Client(asyncio.Protocol):
 
     def __init__(self):
 
@@ -9,7 +8,7 @@ class Server(asyncio.Protocol):
 
     def connection_made(self, transport):
         self.transport = transport
-        self.transport.write("Connection Made".encode())
+        print("Connection Made")
 
     def data_received(self, data):
         data = data.decode().rstrip()
@@ -23,4 +22,4 @@ class Server(asyncio.Protocol):
         # self.transport.write(str(self.credentials).encode())
 
     def connection_lost(self, exit):
-        print("Client Disconnected")
+        print("ASDF Client Disconnected")
