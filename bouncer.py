@@ -8,7 +8,7 @@ class Bouncer(object):
 
     def __init__(self):
 
-        self.clients = list()
+        self.clients = set()
         self.networks = dict()
 
 
@@ -18,7 +18,7 @@ class Bouncer(object):
         coroutine = loop.create_server(lambda: Client(self),
                                        hostname, port)
         server = loop.run_until_complete(coroutine)
-        print("Starting Server")
+
         try: loop.run_forever()
         except KeyboardInterrupt: pass
         finally: loop.close()
