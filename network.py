@@ -23,19 +23,18 @@ class Network(asyncio.Protocol):
         self.send("NICK", self.nickname)
         self.send("USER", self.username, self.usermode, "*", self.realname)
 
-
-
         self.send("JOIN", "#testing12345")
-        print("Connected to Network")
+
+    def connection_lost(self, exit):
+        print("Network Disconnected")
 
     def data_received(self, data):
 
         command, message = data.decode().rstrip().split(" ", 1)
-        if command == "PING": self.send("PONG", message)
         print(command, message)
-
-    def connection_lost(self, exit):
-        print("Network Disconnected")
+        if command == "PING": self.send("PONG", message)
+        for client in self.bouncer.clients:
+            client.transport.write(data)
 
     def send(self, command, *args):
 

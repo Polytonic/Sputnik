@@ -8,7 +8,7 @@ class Bouncer(object):
 
     def __init__(self):
 
-        self.clients = dict()
+        self.clients = list()
         self.networks = dict()
 
 
