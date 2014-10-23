@@ -9,14 +9,15 @@ class Client(Connection):
         self.broker  = None
 
     def connection_made(self, transport):
+
         self.bouncer.clients.add(self)
         self.transport = transport
         self.connected = False
 
         print("Client Connected to Bouncer")
 
-
     def connection_lost(self, exit):
+
         self.bouncer.clients.remove(self)
         print("Client Disconnected from Bouncer")
 

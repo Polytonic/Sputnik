@@ -11,23 +11,31 @@ class Network(Connection):
         self.password = password
         self.realname = ":%s" % realname
 
-        self.bouncer, self.network = bouncer, network
+        self.bouncer = bouncer
+        self.network = network
+
+    def connection_made(self, transport):
+
         if self.network in self.bouncer.networks:
             self.bouncer.networks[self.network].transport.close()
         self.bouncer.networks[self.network] = self
-
-    def connection_made(self, transport):
 
         self.transport  = transport
         self.linebuffer = ""
         self.chatbuffer = []
 
+        print("Bouncer Connected to Network")
 
         self.send("PASS", self.password) if self.password else None
         self.send("NICK", self.nickname)
         self.send("USER", self.username, self.usermode, "*", self.realname)
 
         # self.send("JOIN", "#testing12345")
+
+    def connection_lost(self, exit):
+
+        self.bouncer.networks.pop(self)
+        print("Bouncer Disconnected from Network")
 
     def data_received(self, data):
 
