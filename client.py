@@ -23,25 +23,25 @@ class Client(Connection):
 
     def data_received(self, data):
 
-        command, message = data.decode().rstrip().split(" ", 1)
-        print("[D to C]\t%s %s" %(command, message))
+        data = data.decode().rstrip().split("\r\n")
 
-        if command == "PING": self.forward(data.decode())
-        if command == "USER":
+        for line in data:
+            l = line.split(" ", 1)
+            if l[0] == "PING": self.forward(line)
+            if l[0] == "USER":
 
-            self.username, self.network = message.split(" ")[0].split("/")
-            if not self.network in self.bouncer.networks:
-                self.send("This Network Does Not Exist")
-            else: self.broker = self.bouncer.networks[self.network]
+                self.username, self.network = l[1].split(" ")[0].split("/")
+                if not self.network in self.bouncer.networks:
+                    self.send("This Network Does Not Exist")
+                else: self.broker = self.bouncer.networks[self.network]
+
+            self.forward(line)
 
         # this prints the server connection log
         # there is a race condition here
         if self.broker and not self.connected:
             [self.send(line) for line in self.broker.chatbuffer]
             self.connected = True
-
-        self.forward(data.decode())
-
 
     def send(self, *args):
 
