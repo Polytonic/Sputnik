@@ -5,7 +5,7 @@ class Client(Connection):
     def __init__(self, bouncer):
 
         self.bouncer = bouncer
-        self.network = None
+        self.network = None # EAFP or LBYP ...
         self.broker  = None
 
     def connection_made(self, transport):
@@ -26,7 +26,7 @@ class Client(Connection):
         command, message = data.decode().rstrip().split(" ", 1)
         print("[D to C]\t%s %s" %(command, message))
 
-        if command == "PING": self.forward(data)
+        if command == "PING": self.forward(data.decode())
         if command == "USER":
 
             self.username, self.network = message.split(" ")[0].split("/")
@@ -52,5 +52,6 @@ class Client(Connection):
     def forward(self, *args):
 
         message = self.normalize(" ".join(args))
-        if self.broker: self.broker.transport.write(message.encode())
-        print("[C to B]\t%s" % message, end="")
+        if self.broker:
+            self.broker.transport.write(message.encode())
+            print("[C to B]\t%s" % message, end="")

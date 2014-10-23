@@ -18,6 +18,6 @@ class Connection(asyncio.Protocol):
 
         message = self.normalize(" ".join(args))
         for client in self.bouncer.clients:
-            if client.network == self:
+            if client.broker == self:
                 client.transport.write(message.encode())
                 print("[B to C]\t%s" % message, end="")

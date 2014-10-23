@@ -50,14 +50,15 @@ class Network(Connection):
 
             l = line.split(" ", 2)
             if   l[0] == "PING": self.send("PONG", l[1])
+            elif l[1] == "PONG": self.forward("PONG", l[2])
+
+            # breaks because it can't check for integers because 353 and 366
+            # are related to channel joining and responses etc.
 
             elif l[1] == "NOTICE": self.chatbuffer.append(line)
             elif l[1] == "MODE": self.chatbuffer.append(line)
             elif l[1].isdigit(): self.chatbuffer.append(line)
-
-            else:
-                self.forward(line)
-
+            else: self.forward(line)
 
 
         else: self.linebuffer = ""
