@@ -6,12 +6,12 @@ class Client(Connection):
 
         self.bouncer = bouncer
         self.network = None
-
-        self.connected = False
+        self.broker  = None
 
     def connection_made(self, transport):
-        self.transport = transport
         self.bouncer.clients.add(self)
+        self.transport = transport
+        self.connected = False
 
         print("Client Connected to Bouncer")
 
@@ -31,18 +31,15 @@ class Client(Connection):
             self.username, self.network = message.split(" ")[0].split("/")
             if not self.network in self.bouncer.networks:
                 self.send("This Network Does Not Exist")
-            else: print("\n\tUsing Network: %s\n" % self.network)
+            else: self.broker = self.bouncer.networks[self.network]
 
         # this prints the server connection log
         # there is a race condition here
-        if self.network and not self.connected:
-            for line in self.bouncer.networks["freenode"].chatbuffer:
-                self.send(line)
+        if self.broker and not self.connected:
+            [self.send(line) for line in self.broker.chatbuffer]
             self.connected = True
 
-        if self.network:
-
-            self.forward(data.decode())
+        self.forward(data.decode())
 
 
     def send(self, *args):
@@ -54,5 +51,5 @@ class Client(Connection):
     def forward(self, *args):
 
         message = self.normalize(" ".join(args))
-        self.bouncer.networks[self.network].transport.write(message.encode())
+        if self.broker: self.broker.transport.write(message.encode())
         print("[C to B]\t%s" % message, end="")
