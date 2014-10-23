@@ -1,18 +1,20 @@
-import asyncio
+from connection import Connection
 
-class Client(asyncio.Protocol):
+class Client(Connection):
 
     def __init__(self, bouncer):
 
         self.bouncer = bouncer
         self.network = None
 
+        self.connected = False
+
     def connection_made(self, transport):
         self.transport = transport
         self.bouncer.clients.add(self)
+
         print("Client Connected to Bouncer")
-        self.transport.write(self.bouncer.networks["freenode"].buffer.encode())
-        print(self.bouncer.networks["freenode"].buffer)
+
 
     def connection_lost(self, exit):
         self.bouncer.clients.remove(self)
@@ -21,22 +23,36 @@ class Client(asyncio.Protocol):
     def data_received(self, data):
 
         command, message = data.decode().rstrip().split(" ", 1)
-        print("[D to C]\t", command, message)
+        print("[D to C]\t%s %s" %(command, message))
 
         if command == "PING": self.forward(data)
         if command == "USER":
 
             self.username, self.network = message.split(" ")[0].split("/")
             if not self.network in self.bouncer.networks:
-                print("This Network Does Not Exist")
-            else: self.network = self.bouncer.networks.get(self.network)
+                self.send("This Network Does Not Exist")
+            else: print("\n\tUsing Network: %s\n" % self.network)
 
-    def send(self, command, *args):
+        # this prints the server connection log
+        # there is a race condition here
+        if self.network and not self.connected:
+            for line in self.bouncer.networks["freenode"].chatbuffer:
+                self.send(line)
+            self.connected = True
 
-        message = "%s %s\r\n" % (command, " ".join(args))
+        if self.network:
+
+            self.forward(data.decode())
+
+
+    def send(self, *args):
+
+        message = self.normalize(" ".join(args))
         self.transport.write(message.encode())
-        print("[C to B]\t" + message.rstrip())
+        print("[C to D]\t%s" % message, end="")
 
-    def forward(self, data):
-        print("[C to B]\t%s" % data.decode())
-        self.bouncer.networks["freenode"].transport.write(data)
+    def forward(self, *args):
+
+        message = self.normalize(" ".join(args))
+        self.bouncer.networks[self.network].transport.write(message.encode())
+        print("[C to B]\t%s" % message, end="")

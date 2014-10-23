@@ -39,5 +39,5 @@ if __name__ == "__main__":
     bouncer = Bouncer()
     bouncer.add_network("irc.freenode.net", 6667)
     # bouncer.add_network("irc.quakenet.org", 6667)
-    # bouncer.add_network("irc.efnet.org", 6667)
+    # bouncer.add_network("irc.gamesurge.net", 6667)
     bouncer.start()

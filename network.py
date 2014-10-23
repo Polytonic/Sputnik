@@ -1,6 +1,6 @@
-import asyncio
+from connection import Connection
 
-class Network(asyncio.Protocol):
+class Network(Connection):
 
     def __init__(self, bouncer, network, nickname, username, realname,
                  password=None, usermode=0):
@@ -16,36 +16,40 @@ class Network(asyncio.Protocol):
             self.bouncer.networks[self.network].transport.close()
         self.bouncer.networks[self.network] = self
 
-        self.buffer = ""
-
     def connection_made(self, transport):
-        self.transport = transport
+
+        self.transport  = transport
+        self.linebuffer = ""
+        self.chatbuffer = []
+
+
         self.send("PASS", self.password) if self.password else None
         self.send("NICK", self.nickname)
         self.send("USER", self.username, self.usermode, "*", self.realname)
-        print("Bouncer Connected to Network %s" % self.network)
 
-    def connection_lost(self, exit):
-        print("Bouncer Disconnected from Network %s" % self.network)
+        # self.send("JOIN", "#testing12345")
 
     def data_received(self, data):
 
-        command, message = data.decode().rstrip().split(" ", 1)
-        print("[N to B]\t%s" % command, message)
+        data = data.decode()
+        if not data.endswith("\r\n"):
+            self.linebuffer += data
+            return
 
-        if   command == "PING": self.send("PONG", message)
-        elif command == "PONG": self.forward(data) # no this isn't quite right
-        else: self.buffer += data.decode()
+        for line in (self.linebuffer + data).rstrip().split("\r\n"):
 
-    def send(self, command, *args):
+            print("[N to B]\t%s" % line)
 
-        message = "%s %s\r\n" % (command, " ".join(args))
-        self.transport.write(message.encode())
-        print("[B to N]\t" + message.rstrip())
+            l = line.split(" ", 2)
+            if   l[0] == "PING": self.send("PONG", l[1])
 
-    def forward(self, data):
+            elif l[1] == "NOTICE": self.chatbuffer.append(line)
+            elif l[1] == "MODE": self.chatbuffer.append(line)
+            elif l[1].isdigit(): self.chatbuffer.append(line)
 
-        print("[B to C]\t%s" % data.decode())
-        for client in self.bouncer.clients:
-            if client.network == self:
-                client.transport.write(data)
+            else:
+                self.forward(line)
+
+
+
+        else: self.linebuffer = ""
