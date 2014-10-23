@@ -34,7 +34,7 @@ class Network(Connection):
 
     def connection_lost(self, exit):
 
-        self.bouncer.networks.pop(self)
+        self.bouncer.networks.pop(self.network)
         print("Bouncer Disconnected from Network")
 
     def data_received(self, data):
