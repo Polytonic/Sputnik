@@ -62,3 +62,9 @@ class Network(Connection):
 
 
         else: self.linebuffer = ""
+
+        # only reset the linebuffer if the chatbuffer is successfully replayed to a client
+        # need to periodically PING the client to check if it's still active
+        # need to intercept QUIT message
+        # quit -> AWAY?
+        # load plugins

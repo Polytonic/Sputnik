@@ -23,10 +23,9 @@ class Client(Connection):
 
     def data_received(self, data):
 
-        data = data.decode().rstrip().split("\r\n")
-
-        for line in data:
+        for line in data.decode().rstrip().split("\r\n"):
             l = line.split(" ", 1)
+
             if l[0] == "PING": self.forward(line)
             if l[0] == "USER":
 
