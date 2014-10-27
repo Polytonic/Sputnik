@@ -112,8 +112,6 @@ class Network(Connection):
             elif l[1].isdigit(): self.server_log.append(line)
             else: self.chat_history.append(line)
 
-            self.forward(line)
-
         else: self.linebuffer = ""
 
         if self.bouncer.clients:

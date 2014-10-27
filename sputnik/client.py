@@ -88,7 +88,7 @@ class Client(Connection):
         # there is a race condition here
 
         if self.broker and not self.ready:
-            [self.send(line, "[C to D]") for line in self.broker.server_log]
+            [self.send(line) for line in self.broker.server_log]
             self.ready = True
 
         # can try to message the client, say "I'm not ready yet, and then
