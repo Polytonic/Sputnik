@@ -1,3 +1,4 @@
+from collections import deque
 from connection import Connection
 
 class Network(Connection):
@@ -22,7 +23,8 @@ class Network(Connection):
 
         self.transport  = transport
         self.linebuffer = ""
-        self.chatbuffer = []
+        self.server_log = []
+        self.chat_history = deque()
 
         print("Bouncer Connected to Network")
 
@@ -55,15 +57,23 @@ class Network(Connection):
             # breaks because it can't check for integers because 353 and 366
             # are related to channel joining and responses etc.
 
-            elif l[1] == "NOTICE": self.chatbuffer.append(line)
-            elif l[1] == "MODE": self.chatbuffer.append(line)
-            elif l[1].isdigit(): self.chatbuffer.append(line)
-            else: self.forward(line)
+            elif l[1] == "NOTICE": self.server_log.append(line)
+            elif l[1] == "MODE": self.server_log.append(line)
+            elif l[1].isdigit(): self.server_log.append(line)
+            else: self.chat_history.append(line)
+
+            self.forward(line)
 
 
         else: self.linebuffer = ""
 
-        # only reset the linebuffer if the chatbuffer is successfully replayed to a client
+        if self.bouncer.clients:
+            while self.chat_history:
+                line = self.chat_history.popleft()
+                self.forward(line)
+
+
+        # only reset the linebuffer if the server_log is successfully replayed to a client
         # need to periodically PING the client to check if it's still active
         # need to intercept QUIT message
         # quit -> AWAY?

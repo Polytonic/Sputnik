@@ -27,6 +27,7 @@ class Client(Connection):
             l = line.split(" ", 1)
 
             if l[0] == "PING": self.forward(line)
+
             if l[0] == "USER":
 
                 self.username, self.network = l[1].split(" ")[0].split("/")
@@ -34,12 +35,13 @@ class Client(Connection):
                     self.send("This Network Does Not Exist")
                 else: self.broker = self.bouncer.networks[self.network]
 
-            self.forward(line)
+            if l[0] != "QUIT":
+                self.forward(line)
 
         # this prints the server connection log
         # there is a race condition here
         if self.broker and not self.connected:
-            [self.send(line) for line in self.broker.chatbuffer]
+            [self.send(line) for line in self.broker.server_log]
             self.connected = True
 
     def send(self, *args):
