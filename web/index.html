@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sputnik Web Interface</title>
+
+    <!-- Thirt party styles -->
+    <link href="third-party/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="third-party/bootstrap-material-design/css/ripples.min.css" rel="stylesheet">
+    <link href="third-party/bootstrap-material-design/css/material-wfont.min.css" rel="stylesheet">
+
+    <!-- Sputnik styles -->
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+
+    <!-- Third party scripts -->
+    <script src='third-party/handlebars/handlebars-v2.0.0.js'></script>
+</head>
+<body>
+
+<div class="container well" id="sputnik-content-container">
+    <img class="banner" src="images/sputnik_banner.png">
+
+    <div class="page-header no-border">
+        <h1>Sputnik Web Interface</h1>
+    </div>
+
+    <div id="controls">
+        <a href="javascript:addServer()" class="btn btn-sputnik-primary" id="add-server-btn">Add Server</a>
+    </div>
+    <div id="sputnik-servers-form" class="well">
+        <form class="form-horizontal">
+            <legend>Server List</legend>
+            <div id="servers-list">
+
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // TODO: Automatically rename duplicate form fields.
+        // http://stackoverflow.com/questions/11380045/repeating-div-with-form-fields
+        var serverEntrySource = "" +
+            "<div class='server panel panel-default'>" +
+                "<div class='server-title panel-heading'>" +
+                    "<h3 class='panel-title'>Server</h3>" +
+                "</div>" +
+                "<div class='panel-body'>" +
+                    "<div class='form-group'>" +
+                        "<label for='servername' class='col-lg-2 control-label'>Server Name</label>" +
+                        "<div class='col-lg-10'>" +
+                            "<input type='text' class='form-control' name='servername' placeholder='Freenode' value='{{server.name}}'>" +
+                        "</div>" +
+                    "</div>" +
+                    "" +
+                    "<div class='form-group'>" +
+                        "<label for='serveraddress' class='col-lg-2 control-label'>Server Address</label>" +
+                        "<div class='col-lg-10'>" +
+                            "<input type='text' class='form-control' name='serveraddress' placeholder='irc.freenode.net' value='{{server.address}}'>" +
+                        "</div>" +
+                    "</div>" +
+                    "" +
+                    "<div class='form-group'>" +
+                        "<label for='nickname' class='col-lg-2 control-label'>Nickname</label>" +
+                        "<div class='col-lg-10'>" +
+                            "<input type='text' class='form-control' name='nickname' value='{{nickname}}'>" +
+                        "</div>" +
+                    "</div>" +
+                    "" +
+                    "<div class='form-group'>" +
+                        "<label for='altnickname' class='col-lg-2 control-label'>Alternate Nickname</label>" +
+                        "<div class='col-lg-10'>" +
+                            "<input type='text' class='form-control' name='altnickname' value='{{altnickname}}'>" +
+                        "</div>" +
+                    "</div>" +
+                    "" +
+                    "<div class='form-group'>" +
+                        "<label for='ident' class='col-lg-2 control-label'>Ident</label>" +
+                        "<div class='col-lg-10'>" +
+                            "<input type='text' class='form-control' name='ident' value='{{ident}}'>" +
+                        "</div>" +
+                    "</div>" +
+                "</div>" +
+            "</div>" +
+        "";
+        var serverEntryTemplate = Handlebars.compile(serverEntrySource);
+
+        var serverEntryData = {
+            "server": {
+                "name": "Quakenet",
+                "address": "irc.quakenet.org"
+            },
+            "nickname" : "Test nickname",
+            "altnickname" : "Test altnickname",
+            "ident": "Test ident"
+        };
+
+        var serverEntry = serverEntryTemplate(serverEntryData);
+
+        var serversList = document.getElementById("servers-list");
+
+        addServer();
+
+        function addServer() {
+            var serverContainer = document.createElement('div');
+            serverContainer.className = 'server-container-initial';
+
+            serverContainer.innerHTML = serverEntry;
+            serversList.appendChild(serverContainer);
+            setTimeout(function() {
+                serverContainer.className += ' server-container-transition';
+            }, 100);
+        }
+    </script>
+</div>
+
+<!-- Third party scripts -->
+<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+
+<script src="third-party/bootstrap/js/bootstrap.min.js"></script>
+<script src="third-party/bootstrap-material-design/js/ripples.min.js"></script>
+<script src="third-party/bootstrap-material-design/js/material.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $.material.init();
+    });
+</script>
+
+</body>
+</html>

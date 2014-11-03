@@ -1,0 +1,85 @@
+html, body {
+    background-color: #292929;
+    height: 100%;
+    color: #292929;
+    margin: 0;
+    padding: 0;
+}
+
+.no-border {
+    border: none;
+}
+
+.banner {
+    max-height: 160px;
+    max-width: 618px;
+    margin: 0px auto 0px auto;
+    position: absolute;
+    left: 20%;
+    right: 5%;
+}
+
+#sputnik-content-container {
+    background-color: #8F9E8B;
+}
+
+#sputnik-servers-form {
+    background-color: #5B7876;
+    margin: 2px;
+    padding: 8px;
+}
+
+#add-server-btn {
+    background-color: #5B7876;
+    color: #292929;
+}
+
+#servers-list {
+    overflow: hidden;
+}
+
+.server {
+    background-color: #F2E6B6;
+    margin: 4px 0px 12px 0px;
+}
+
+.server-container-initial {
+    -webkit-transform: translate(0px, 100%);
+       -moz-transform: translate(0px, 100%);
+        -ms-transform: translate(0px, 100%);
+         -o-transform: translate(0px, 100%);
+}
+
+.server-container-transition {
+    -webkit-transform: translate(0px, 0%);
+       -moz-transform: translate(0px, 0%);
+        -ms-transform: translate(0px, 0%);
+         -o-transform: translate(0px, 0%);
+
+    -webkit-transition: 1.5s ease-out;
+       -moz-transition: 1.5s ease-out;
+         -o-transition: 1.5s ease-out;
+            transition: 1.5s ease-out;
+}
+
+.server-container-disabled {
+    background-color: #5C5A54;
+}
+
+.server-title {
+    font-size: 14pt;
+    background-color: #ECD195 !important;
+}
+
+.input-title {
+    font-size: 12pt;
+}
+
+input[type="text"].disabled {
+    color: #646464;
+    background-color: #ACACAC;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
