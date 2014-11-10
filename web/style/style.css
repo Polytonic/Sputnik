@@ -11,6 +11,10 @@ html, body {
 }
 
 .banner {
+    height: 140px;
+}
+
+.banner-img {
     max-height: 160px;
     max-width: 618px;
     margin: 0px auto 0px auto;
@@ -19,19 +23,28 @@ html, body {
     right: 5%;
 }
 
+.plain-link:link {
+    text-decoration: none;
+    color: inherit;
+}
+
 #sputnik-content-container {
     background-color: #8F9E8B;
 }
 
-#sputnik-servers-form {
+#controls {
+    height: 56px;
+}
+
+#sputnik-servers-container {
     background-color: #5B7876;
     margin: 2px;
     padding: 8px;
 }
 
-#add-server-btn {
-    background-color: #5B7876;
-    color: #292929;
+.btn-sputnik-primary {
+    background-color: #5B7876 !important;
+    color: #292929 !important;
 }
 
 #servers-list {
