@@ -47,6 +47,11 @@ html, body {
     color: #292929 !important;
 }
 
+.btn-sputnik-secondary {
+    background-color: #ECD195 !important;
+    color: #292929 !important;
+}
+
 #servers-list {
     overflow: hidden;
 }

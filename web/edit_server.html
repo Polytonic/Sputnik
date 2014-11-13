@@ -4,28 +4,28 @@
     <title>Sputnik Web Interface</title>
 
     <!-- Third party styles -->
-    <link href="third-party/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="third-party/bootstrap-material-design/css/ripples.min.css" rel="stylesheet">
-    <link href="third-party/bootstrap-material-design/css/material-wfont.min.css" rel="stylesheet">
+    <link href="static/third-party/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/third-party/bootstrap-material-design/css/ripples.min.css" rel="stylesheet">
+    <link href="static/third-party/bootstrap-material-design/css/material-wfont.min.css" rel="stylesheet">
 
     <!-- Sputnik styles -->
-    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <link rel="stylesheet" type="text/css" href="static/style/style.css">
 
     <!-- Third party scripts -->
-    <script src='third-party/handlebars/handlebars-v2.0.0.js'></script>
+    <script src='static/third-party/handlebars/handlebars-v2.0.0.js'></script>
 </head>
 <body>
 
 <div class="container well" id="sputnik-content-container">
     <a class="plain-link" href="index.html">
         <div class="banner page-header no-border">
-            <img class="banner-img" src="images/sputnik_banner.png">
+            <img class="banner-img" src="static/images/sputnik_banner.png">
             <h1>Sputnik Web Interface</h1>
         </div>
     </a>
 
     <div id="controls">
-        <a href="index.html" class="btn btn-sputnik-primary">Home</a>
+        <a href="/" class="btn btn-sputnik-primary">Home</a>
     </div>
 
     <div id="sputnik-servers-container" class="well form-horizontal">
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <script src='js/serverEntry.js'></script>
+    <script src='static/js/editServer.js'></script>
 
     <script>
         var serversListElement = document.getElementById("servers-list");
@@ -49,16 +49,16 @@
             "ident": "Test ident"
         };
 
-        addServer({}, serversListElement);
+        addEditServer({}, serversListElement);
     </script>
 </div>
 
 <!-- Third party scripts -->
 <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 
-<script src="third-party/bootstrap/js/bootstrap.min.js"></script>
-<script src="third-party/bootstrap-material-design/js/ripples.min.js"></script>
-<script src="third-party/bootstrap-material-design/js/material.min.js"></script>
+<script src="static/third-party/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/third-party/bootstrap-material-design/js/ripples.min.js"></script>
+<script src="static/third-party/bootstrap-material-design/js/material.min.js"></script>
 
 <script>
     $(document).ready(function() {

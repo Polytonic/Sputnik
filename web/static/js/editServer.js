@@ -1,4 +1,4 @@
-var serverEntrySource = "" +
+var editServerEntrySource = "" +
     "<div class='server panel panel-default'>" +
         "<div class='server-title panel-heading'>" +
             "<h3 class='panel-title'>Server</h3>" +
@@ -7,44 +7,40 @@ var serverEntrySource = "" +
             "<div class='form-group'>" +
                 "<label for='servername' class='col-lg-2 control-label'>Server Name</label>" +
                 "<div class='col-lg-10'>" +
-                    "<input type='text' class='form-control' name='servername' placeholder='Freenode' value='{{server.name}}' disabled=''>" +
+                    "<input type='text' class='form-control' name='servername' placeholder='Freenode' value='{{server.name}}'>" +
                 "</div>" +
             "</div>" +
             "" +
             "<div class='form-group'>" +
                 "<label for='serveraddress' class='col-lg-2 control-label'>Server Address</label>" +
                 "<div class='col-lg-10'>" +
-                    "<input type='text' class='form-control' name='serveraddress' placeholder='irc.freenode.net' value='{{server.address}}' disabled=''>" +
+                    "<input type='text' class='form-control' name='serveraddress' placeholder='irc.freenode.net' value='{{server.address}}'>" +
                 "</div>" +
             "</div>" +
             "" +
             "<div class='form-group'>" +
                 "<label for='nickname' class='col-lg-2 control-label'>Nickname</label>" +
                 "<div class='col-lg-10'>" +
-                    "<input type='text' class='form-control' name='nickname' value='{{nickname}}' disabled=''>" +
+                    "<input type='text' class='form-control' name='nickname' value='{{nickname}}'>" +
                 "</div>" +
             "</div>" +
             "" +
             "<div class='form-group'>" +
                 "<label for='ident' class='col-lg-2 control-label'>Ident</label>" +
                 "<div class='col-lg-10'>" +
-                    "<input type='text' class='form-control' name='ident' value='{{ident}}' disabled=''>" +
+                    "<input type='text' class='form-control' name='ident' value='{{ident}}'>" +
                 "</div>" +
-            "</div>" +
-            "<div class='pull-right'>" +
-                "<a href='/edit?name={{server.name}}' class='btn btn-sputnik-secondary'>Edit</a>" +
-                "<a href='javascript:void(0)' class='btn btn-sputnik-secondary'>Delete</a>" +
             "</div>" +
         "</div>" +
     "</div>" +
 "";
-var serverEntryTemplate = Handlebars.compile(serverEntrySource);
+var editServerEntryTemplate = Handlebars.compile(editServerEntrySource);
 
-function addServer(serverEntryData, serversListElement) {
+function addEditServer(serverEntryData, serversListElement) {
     var serverContainer = document.createElement('div');
     serverContainer.className = 'server-container-initial';
 
-    var serverEntry = serverEntryTemplate(serverEntryData);
+    var serverEntry = editServerEntryTemplate(serverEntryData);
 
     serverContainer.innerHTML = serverEntry;
     serversListElement.appendChild(serverContainer);

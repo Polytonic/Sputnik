@@ -20,7 +20,8 @@ class WebServer(object):
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
-            (r"/", MainHandler)
+            (r"/", MainHandler),
+            (r"/edit", EditHandler)
         ]
         settings = {
             "template_path": websettings.TEMPLATE_PATH,
@@ -32,4 +33,9 @@ class Application(tornado.web.Application):
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render(os.path.join(websettings.WEB_ROOT, "index.html"))
+
+
+class EditHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render(os.path.join(websettings.WEB_ROOT, "edit_server.html"))
 
