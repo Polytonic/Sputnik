@@ -8,6 +8,7 @@ point, the Bouncer is responsible for bootstrapping the entire program.
 import asyncio
 from network import Network
 from client import Client
+from webserver import WebServer
 
 
 class Bouncer(object):
@@ -44,6 +45,9 @@ class Bouncer(object):
             hostname (str, optional): Hostname to use. Defaults to ``""``.
             port (int, optional): The port to listen on. Defaults to 6667.
         """
+
+        webserver = WebServer()
+        webserver.start(9999)
 
         loop = asyncio.get_event_loop()
         coro = loop.create_server(lambda: Client(self),
