@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sputnik Web Interface</title>
+
+    <!-- Third party styles -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.jsdelivr.net/bootstrap.material-design/0.1.5/css/ripples.min.css" rel="stylesheet">
+    <link href="//cdn.jsdelivr.net/bootstrap.material-design/0.1.5/css/material-wfont.min.css" rel="stylesheet">
+
+    <!-- Sputnik styles -->
+    <link rel="stylesheet" type="text/css" href="static/style/style.css">
+
+    <!-- Third party scripts -->
+    <!-- <script src='static/third-party/handlebars/handlebars-v2.0.0.js'></script> -->
+</head>
+<body>
+
+<div class="container well" id="sputnik-content-container">
+    <a class="plain-link" href="">
+        <div class="banner page-header no-border">
+            <img class="banner-img" src="static/assets/banner.png">
+            <h1>Sputnik Web Interface</h1>
+        </div>
+    </a>
+
+    {% block content %}{% end %}
+</div>
+
+<!-- Third party scripts -->
+<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/bootstrap.material-design/0.1.5/js/ripples.min.js"></script>
+<script src="//cdn.jsdelivr.net/bootstrap.material-design/0.1.5/js/material.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $.material.init();
+    });
+</script>
+
+</body>
+</html>

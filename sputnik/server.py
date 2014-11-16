@@ -20,15 +20,20 @@ class HTTPServer(tornado.web.Application):
     the DEBUG environment variable. e.g. `export DEBUG=True`
     """
 
-    def __init__(self):
+    def __init__(self, bouncer):
         """Creates an instance of an HTTPServer.
 
             Defines the available routes and initializes the server using the
             static path and template path specified within.
+
+        Args:
+            bouncer (sputnik.Bouncer): The singleton Bouncer instance.
         """
 
+        self.bouncer = bouncer
+
         routes = [(r"/edit", handlers.EditHandler),
-                  (r"/",     handlers.MainHandler)]
+                  (r"/",     handlers.MainHandler, dict(bouncer=self.bouncer))]
 
         tornado.platform.asyncio.AsyncIOMainLoop().install()
         super().__init__(debug=os.environ.get("DEBUG"),

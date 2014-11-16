@@ -51,7 +51,7 @@ class Bouncer(object):
         coro = loop.create_server(lambda: Client(self),
                                   hostname, port)
         loop.run_until_complete(coro)
-        HTTPServer().start()
+        HTTPServer(bouncer).start()
 
         try: loop.run_forever()
         except KeyboardInterrupt: pass
