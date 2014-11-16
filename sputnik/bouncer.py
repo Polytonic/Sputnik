@@ -6,9 +6,9 @@ point, the Bouncer is responsible for bootstrapping the entire program.
 """
 
 import asyncio
-from network import Network
 from client import Client
-from webserver import WebServer
+from network import Network
+from server import HTTPServer
 
 
 class Bouncer(object):
@@ -33,10 +33,11 @@ class Bouncer(object):
         self.networks = dict()
 
     def start(self, hostname="", port=6667):
-        """Starts the IRC listen server.
+        """Starts the IRC and HTTP listen servers.
 
-        This creates the server-portion of the Bouncer, allowing it to accept
-        connections from IRC clients.
+        This creates the IRC server-portion of the Bouncer, allowing it to
+        accept connections from IRC clients. It also starts the HTTP server,
+        enabling browsers to connect to the web interface.
 
         Note:
             This is a blocking call.
@@ -46,13 +47,11 @@ class Bouncer(object):
             port (int, optional): The port to listen on. Defaults to 6667.
         """
 
-        webserver = WebServer()
-        webserver.start(9999)
-
         loop = asyncio.get_event_loop()
         coro = loop.create_server(lambda: Client(self),
                                   hostname, port)
         loop.run_until_complete(coro)
+        HTTPServer().start()
 
         try: loop.run_forever()
         except KeyboardInterrupt: pass
