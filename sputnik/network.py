@@ -22,7 +22,7 @@ class Network(Connection):
     """
 
     def __init__(self, bouncer, network, nickname, username, realname,
-                 password=None, usermode=0):
+                 hostname, port, password=None, usermode=0):
         """Creates an instance of a Network.
 
         This performs a minimum level of string formatting and type coercion in
@@ -34,6 +34,8 @@ class Network(Connection):
             nickname (str): The IRC nickname to use when connecting.
             username (str): The IRC ident to use when connecting.
             realname (str): The real name of the user.
+            hostname (str): The hostname of the IRC network to connect to.
+            port (int): The port to connect using.
             password (str, optional): Bouncer password. Defaults to ``None``.
             usermode (int, optional): The IRC usermode. Defaults to ``0``.
         """
@@ -45,6 +47,8 @@ class Network(Connection):
         self.realname = ":%s" % realname
         self.bouncer = bouncer
         self.network = network
+        self.hostname = hostname
+        self.port = port
 
     def connection_made(self, transport):
         """Registers the connected Network with the Bouncer.

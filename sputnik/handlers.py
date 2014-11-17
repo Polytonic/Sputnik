@@ -1,20 +1,21 @@
 import tornado.web
 
-
-class MainHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler):
     def initialize(self, bouncer):
         self.bouncer = bouncer
 
+
+class MainHandler(BaseHandler):
     def get(self):
-        servers_list = [dict(name='Freenode',
-                             address='irc.freenode.net',
-                             nickname='test nickname',
-                             ident='test ident'),
-                        dict(name='test_server 2')]
-
-        self.render("index.html", servers_list=servers_list)
+        self.render("index.html", networks=self.bouncer.networks)
 
 
-class EditHandler(tornado.web.RequestHandler):
+class EditHandler(BaseHandler):
     def get(self):
-        self.render("example_missing_template.html")
+        network_name = self.request.path.split('/')[2]
+        self.render("edit.html", network_name=network_name)
+
+
+class AddHandler(BaseHandler):
+    def get(self):
+        self.render("add.html")

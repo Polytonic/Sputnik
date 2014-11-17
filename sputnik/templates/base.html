@@ -9,7 +9,7 @@
     <link href="//cdn.jsdelivr.net/bootstrap.material-design/0.1.5/css/material-wfont.min.css" rel="stylesheet">
 
     <!-- Sputnik styles -->
-    <link rel="stylesheet" type="text/css" href="static/style/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/style/style.css">
 
     <!-- Third party scripts -->
     <!-- <script src='static/third-party/handlebars/handlebars-v2.0.0.js'></script> -->
@@ -19,10 +19,15 @@
 <div class="container well" id="sputnik-content-container">
     <a class="plain-link" href="">
         <div class="banner page-header no-border">
-            <img class="banner-img" src="static/assets/banner.png">
+            <img class="banner-img" src="/static/assets/banner.png">
             <h1>Sputnik Web Interface</h1>
         </div>
     </a>
+
+    <div id="controls">
+        <a href="/" class="btn btn-sputnik-primary">Home</a>
+        <a href="/add/" class="btn btn-sputnik-primary">Add Server</a>
+    </div>
 
     {% block content %}{% end %}
 </div>

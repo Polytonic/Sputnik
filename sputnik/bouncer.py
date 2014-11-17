@@ -59,22 +59,24 @@ class Bouncer(object):
 
     # this is due for a refactor
     # the exact form of this depends on how the web interface is implemented
-    def add_network(self, hostname, port):
+    def add_network(self, hostname, port, network):
 
         loop = asyncio.get_event_loop()
         coro = loop.create_connection(lambda: Network(self,
-                                      network="freenode",
+                                      network=network,
                                       nickname="Decepticon1337",
                                       username="Decepticon1337",
                                       realname="Decepticon1337"),
+                                      hostname=hostname,
+                                      port=port),
                                       hostname, port)
         loop.run_until_complete(coro)
 
 if __name__ == "__main__":
     bouncer = Bouncer()
-    bouncer.add_network("irc.freenode.net", 6667)
+    bouncer.add_network("irc.freenode.net", 6667, "freenode")
     # bouncer.add_network("irc.quakenet.org", 6667)
-    # bouncer.add_network("irc.gamesurge.net", 6667)
+    # bouncer.add_network("irc.gamesurge.net", 6667, "gamesurge")
     bouncer.start()
 
     # eventually should implement __init__.py and __main__.py
