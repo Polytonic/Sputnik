@@ -6,9 +6,9 @@
     <legend>Network List</legend>
     <div id="networks-container-inner">
 
-    {% for name, network in networks.items() %}
-        {% module NetworkEntry(network, network_controls=True, disabled=True) %}
-    {% end %}
+        {% for name, network in networks.items() %}
+            {% module NetworkEntry(network, network_controls=True, disabled=True) %}
+        {% end %}
 
     </div>
 </div>

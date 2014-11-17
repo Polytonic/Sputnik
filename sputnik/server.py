@@ -36,7 +36,7 @@ class HTTPServer(tornado.web.Application):
         route_dict = dict(bouncer=self.bouncer)
         routes = [(r"/edit/.*", handlers.EditHandler, route_dict),
                   (r"/add/.*",  handlers.AddHandler,  route_dict),
-                  (r"/",     handlers.MainHandler, route_dict)]
+                  (r"/",        handlers.MainHandler, route_dict)]
 
         tornado.platform.asyncio.AsyncIOMainLoop().install()
         super().__init__(debug=os.environ.get("DEBUG"),
