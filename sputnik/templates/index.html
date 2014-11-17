@@ -2,49 +2,12 @@
 
 {% block content %}
 
-<div id="sputnik-servers-container" class="well form-horizontal">
-    <legend>Server List</legend>
-    <div id="servers-list">
+<div id="sputnik-networks-container" class="well form-horizontal">
+    <legend>Network List</legend>
+    <div id="networks-container-inner">
 
     {% for name, network in networks.items() %}
-        <div class='server panel panel-default'>
-            <div class='server-title panel-heading'>
-                <h3 class='panel-title'>Server</h3>
-            </div>
-            <div class='panel-body'>
-                <div class='form-group'>
-                    <label for='servername' class='col-lg-2 control-label'>Server Name</label>
-                    <div class='col-lg-10'>
-                        <input type='text' class='form-control' name='servername' value='{{network.network}}' disabled=''>
-                    </div>
-                </div>
-
-                <div class='form-group'>
-                    <label for='serveraddress' class='col-lg-2 control-label'>Server Address</label>
-                    <div class='col-lg-10'>
-                        <input type='text' class='form-control' name='serveraddress' value='{{network.hostname}}:{{network.port}}' disabled=''>
-                    </div>
-                </div>
-
-                <div class='form-group'>
-                    <label for='nickname' class='col-lg-2 control-label'>Nickname</label>
-                    <div class='col-lg-10'>
-                        <input type='text' class='form-control' name='nickname' value='{{network.nickname}}' disabled=''>
-                    </div>
-                </div>
-
-                <div class='form-group'>
-                    <label for='ident' class='col-lg-2 control-label'>Username (Ident)</label>
-                    <div class='col-lg-10'>
-                        <input type='text' class='form-control' name='ident' value='{{network.username}}' disabled=''>
-                    </div>
-                </div>
-                <div class='pull-right'>
-                    <a href='/edit/{{network.network}}/' class='btn btn-sputnik-secondary'>Edit</a>
-                    <a href='javascript:void(0)' class='btn btn-sputnik-secondary'>Delete</a>
-                </div>
-            </div>
-        </div>
+        {% module NetworkEntry(network, network_controls=True, disabled=True) %}
     {% end %}
 
     </div>

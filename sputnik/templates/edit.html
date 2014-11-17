@@ -2,6 +2,16 @@
 
 {% block content %}
 
-{{network_name}}
+<div id="sputnik-networks-container" class="well form-horizontal">
+    <legend>Edit Network</legend>
+    <div id="networks-container-inner">
+
+        {% module NetworkEntry(network) %}
+
+        <div class='pull-right'>
+            <a href='javascript:void(0)' class='btn btn-sputnik-secondary'>Save</a>
+        </div>
+    </div>
+</div>
 
 {% end %}

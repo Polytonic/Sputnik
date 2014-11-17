@@ -10,6 +10,7 @@ import handlers
 import tornado.web
 import tornado.httpserver
 import tornado.platform.asyncio
+import uimodules
 
 
 class HTTPServer(tornado.web.Application):
@@ -41,7 +42,8 @@ class HTTPServer(tornado.web.Application):
         super().__init__(debug=os.environ.get("DEBUG"),
                          handlers=routes,
                          static_path="static",
-                         template_path="templates")
+                         template_path="templates",
+                         ui_modules=uimodules)
 
     def start(self, port=8080):
         """Starts the HTTP listen server.

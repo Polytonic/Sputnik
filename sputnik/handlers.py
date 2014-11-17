@@ -13,7 +13,8 @@ class MainHandler(BaseHandler):
 class EditHandler(BaseHandler):
     def get(self):
         network_name = self.request.path.split('/')[2]
-        self.render("edit.html", network_name=network_name)
+        network = self.bouncer.networks[network_name]
+        self.render("edit.html", network=network)
 
 
 class AddHandler(BaseHandler):
