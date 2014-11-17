@@ -3,11 +3,14 @@
 {% block content %}
 
 <div id="sputnik-networks-container" class="well form-horizontal">
-    <legend>Network List</legend>
+    <h3>Network List</h3>
     <div id="networks-container-inner">
 
+        {% set network_controls = True %}
+        {% set disabled = True %}
+
         {% for name, network in networks.items() %}
-            {% module NetworkEntry(network, network_controls=True, disabled=True) %}
+            {% include network-entry.html %}
         {% end %}
 
     </div>

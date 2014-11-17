@@ -1,13 +1,12 @@
-{% comment fetch attributes on the network, or empty string by default %}
-
-{% set network_name = getattr(network, 'network', '') %}
-{% set network_nickname = getattr(network, 'nickname', '') %}
-{% set network_username = getattr(network, 'username', '') %}
-
-{% if hasattr(network, 'hostname') %}
-    {% set network_address = getattr(network, 'hostname', '') + ':' + \
-                             str(getattr(network, 'port', '')) %}
+{% if 'network' in globals() or 'network' in locals() %}
+    {% set network_name = network.network %}
+    {% set network_nickname = network.nickname %}
+    {% set network_username = network.username %}
+    {% set network_address = network.address %}
 {% else %}
+    {% set network_name = '' %}
+    {% set network_nickname = '' %}
+    {% set network_username = '' %}
     {% set network_address = '' %}
 {% end %}
 
@@ -50,7 +49,7 @@
         {% if network_controls %}
         <div class='pull-right'>
             <a href='/edit/{{network_name}}/' class='btn btn-sputnik-secondary'>Edit</a>
-            <a href='javascript:void(0)' class='btn btn-sputnik-secondary'>Delete</a>
+            <a href='#' class='btn btn-sputnik-secondary'>Delete</a>
         </div>
         {% end %}
     </div>

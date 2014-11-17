@@ -6,17 +6,19 @@ class BaseHandler(tornado.web.RequestHandler):
 
 
 class MainHandler(BaseHandler):
+    @tornado.web.addslash
     def get(self):
         self.render("index.html", networks=self.bouncer.networks)
 
 
 class EditHandler(BaseHandler):
-    def get(self):
-        network_name = self.request.path.split('/')[2]
+    @tornado.web.addslash
+    def get(self, network_name):
         network = self.bouncer.networks[network_name]
         self.render("edit.html", network=network)
 
 
 class AddHandler(BaseHandler):
+    @tornado.web.addslash
     def get(self):
         self.render("add.html")

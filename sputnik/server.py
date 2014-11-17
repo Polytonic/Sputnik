@@ -10,7 +10,6 @@ import handlers
 import tornado.web
 import tornado.httpserver
 import tornado.platform.asyncio
-import uimodules
 
 
 class HTTPServer(tornado.web.Application):
@@ -34,16 +33,15 @@ class HTTPServer(tornado.web.Application):
         self.bouncer = bouncer
 
         route_dict = dict(bouncer=self.bouncer)
-        routes = [(r"/edit/.*", handlers.EditHandler, route_dict),
-                  (r"/add/.*",  handlers.AddHandler,  route_dict),
-                  (r"/",        handlers.MainHandler, route_dict)]
+        routes = [(r"/edit/(\w+)/?", handlers.EditHandler, route_dict),
+                  (r"/add/?",  handlers.AddHandler,  route_dict),
+                  (r"/?",        handlers.MainHandler, route_dict)]
 
         tornado.platform.asyncio.AsyncIOMainLoop().install()
         super().__init__(debug=os.environ.get("DEBUG"),
                          handlers=routes,
                          static_path="static",
-                         template_path="templates",
-                         ui_modules=uimodules)
+                         template_path="templates")
 
     def start(self, port=8080):
         """Starts the HTTP listen server.

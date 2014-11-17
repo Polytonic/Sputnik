@@ -49,6 +49,7 @@ class Network(Connection):
         self.network = network
         self.hostname = hostname
         self.port = port
+        self.address = hostname + ':' + str(port)
 
     def connection_made(self, transport):
         """Registers the connected Network with the Bouncer.

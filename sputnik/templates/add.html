@@ -3,13 +3,15 @@
 {% block content %}
 
 <div id="sputnik-networks-container" class="well form-horizontal">
-    <legend>Add Network</legend>
+    <h3>Add Network</h3>
     <div id="networks-container-inner">
 
-        {% module NetworkEntry(network={}) %}
+        {% set network_controls = False %}
+        {% set disabled = False %}
+        {% include network-entry.html %}
 
         <div class='pull-right'>
-            <a href='javascript:void(0)' class='btn btn-sputnik-secondary'>Save</a>
+            <a href='#' class='btn btn-sputnik-secondary'>Save</a>
         </div>
 
     </div>
