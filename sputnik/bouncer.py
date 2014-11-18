@@ -59,8 +59,8 @@ class Bouncer(object):
 
     # this is due for a refactor
     # the exact form of this depends on how the web interface is implemented
-    def add_network(self, network, hostname, port, nickname, username,
-                    realname):
+    def add_network(self, network, hostname, port,
+                    nickname, username, realname):
 
         loop = asyncio.get_event_loop()
         asyncio.async(loop.create_connection(lambda: Network(self,
