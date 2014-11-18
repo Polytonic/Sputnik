@@ -36,7 +36,7 @@ html, body {
     height: 56px;
 }
 
-#sputnik-servers-container {
+#sputnik-networks-container {
     background-color: #5B7876;
     margin: 2px;
     padding: 8px;
@@ -52,7 +52,7 @@ html, body {
     color: #292929 !important;
 }
 
-#servers-list {
+#networks-container-inner {
     overflow: hidden;
 }
 
@@ -91,6 +91,11 @@ html, body {
 
 .input-title {
     font-size: 12pt;
+}
+
+.sputnik-network-readonly {
+    padding-top: 7px;
+    padding-bottom: 1px;
 }
 
 input[type="text"].disabled {

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sputnik Web Interface</title>
+
+    <!-- Third party styles -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.1.5/css/ripples.min.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.1.5/css/material-wfont.min.css" rel="stylesheet">
+
+    <!-- Sputnik styles -->
+    <link rel="stylesheet" type="text/css" href="/static/style/style.css">
+</head>
+<body>
+
+<div class="container well" id="sputnik-content-container">
+    <a class="plain-link" href="">
+        <div class="banner page-header no-border">
+            <img class="banner-img" src="/static/assets/banner.png">
+            <h1>Sputnik Web Interface</h1>
+        </div>
+    </a>
+
+    <div id="controls">
+        <a href="/" class="btn btn-sputnik-primary">Home</a>
+        <a href="/add/" class="btn btn-sputnik-primary">Add Network</a>
+    </div>
+
+    {% block content %}{% end %}
+</div>
+
+<!-- Third party scripts -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.1.5/js/ripples.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.1.5/js/material.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $.material.init();
+    });
+</script>
+
+</body>
+</html>

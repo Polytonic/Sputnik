@@ -1,0 +1,41 @@
+{% include network-setup.html %}
+
+<div class="server panel panel-default">
+    <div class="server-title panel-heading">
+        <h3 class="panel-title">Network</h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="form-group">
+            <label for="networkname" class="col-lg-2 control-label">Network Name</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" name="networkname" value="{{network_name}}" placeholder="freenode">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="networkaddress" class="col-lg-2 control-label">Network Address</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" name="networkaddress" value="{{network_address}}" placeholder="irc.freenode.net:6667">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="nickname" class="col-lg-2 control-label">Nickname</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" name="nickname" value="{{network_nickname}}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="ident" class="col-lg-2 control-label">Username (Ident)</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" name="ident" value="{{network_username}}">
+            </div>
+        </div>
+
+        <div class="pull-right">
+            {% block network_controls %}{% end %}
+        </div>
+    </div>
+</div>
