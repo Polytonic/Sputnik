@@ -33,9 +33,11 @@ class HTTPServer(tornado.web.Application):
         self.bouncer = bouncer
 
         route_dict = dict(bouncer=self.bouncer)
-        routes = [(r"/edit/(\w+)/?", handlers.EditHandler, route_dict),
-                  (r"/add/?",  handlers.AddHandler,  route_dict),
-                  (r"/?",        handlers.MainHandler, route_dict)]
+        routes = [(r"/edit/(\w+)/?",   handlers.EditGetHandler,  route_dict),
+                  (r"/edit/?",         handlers.EditPostHandler, route_dict),
+                  (r"/delete/(\w+)/?", handlers.DeleteHandler,   route_dict),
+                  (r"/add/?",          handlers.AddHandler,      route_dict),
+                  (r"/?",              handlers.MainHandler,     route_dict)]
 
         tornado.platform.asyncio.AsyncIOMainLoop().install()
         super().__init__(debug=os.environ.get("DEBUG"),

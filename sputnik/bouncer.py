@@ -59,24 +59,30 @@ class Bouncer(object):
 
     # this is due for a refactor
     # the exact form of this depends on how the web interface is implemented
-    def add_network(self, network, hostname, port):
+    def add_network(self, network, hostname, port, nickname, username,
+                    realname):
 
         loop = asyncio.get_event_loop()
-        coro = loop.create_connection(lambda: Network(self,
-                                      network=network,
-                                      nickname="Decepticon1337",
-                                      username="Decepticon1337",
-                                      realname="Decepticon1337"),
-                                      hostname=hostname,
-                                      port=port),
-                                      hostname, port)
-        loop.run_until_complete(coro)
+        asyncio.async(loop.create_connection(lambda: Network(self,
+                                             network=network,
+                                             nickname=nickname,
+                                             username=username,
+                                             realname=realname,
+                                             hostname=hostname,
+                                             port=port),
+                                             hostname, port))
 
 if __name__ == "__main__":
     bouncer = Bouncer()
-    bouncer.add_network("freenode", "irc.freenode.net", 6667)
-    # bouncer.add_network("quakenet", "irc.quakenet.org", 6667)
-    # bouncer.add_network("gamesurge", "irc.gamesurge.net", 6667)
+    bouncer.add_network("freenode", "irc.freenode.net", 6667,
+                        "Decepticon1337", "Decepticon1337",
+                        "Decepticon1337")
+    # bouncer.add_network("quakenet", "irc.quakenet.org", 6667,
+    #                     "Decepticon1337", "Decepticon1337",
+    #                     "Decepticon1337")
+    # bouncer.add_network("gamesurge", "irc.gamesurge.net", 6667,
+    #                     "Decepticon1337", "Decepticon1337",
+    #                     "Decepticon1337")
     bouncer.start()
 
     # eventually should implement __init__.py and __main__.py

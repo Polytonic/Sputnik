@@ -1,0 +1,11 @@
+{% if "network" in globals() or "network" in locals() %}
+    {% set network_name = network.network %}
+    {% set network_nickname = network.nickname %}
+    {% set network_username = network.username %}
+    {% set network_address = network.address %}
+{% else %}
+    {% set network_name = "" %}
+    {% set network_nickname = "" %}
+    {% set network_username = "" %}
+    {% set network_address = "" %}
+{% end %}

@@ -93,6 +93,11 @@ html, body {
     font-size: 12pt;
 }
 
+.sputnik-network-readonly {
+    padding-top: 7px;
+    padding-bottom: 1px;
+}
+
 input[type="text"].disabled {
     color: #646464;
     background-color: #ACACAC;
