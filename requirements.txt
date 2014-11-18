@@ -1,1 +1,2 @@
 tornado>=4.0.x
+redis>=2.10.3
