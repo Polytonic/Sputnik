@@ -108,13 +108,24 @@ class Network(Connection):
             if   l[0] == "PING": self.send("PONG", l[1])
             elif l[1] == "PONG": self.forward("PONG", l[2])
 
-            # breaks because it can't check for integers because 353 and 366
-            # are related to channel joining and responses etc.
+            # elif l[1] == "NOTICE" or l[1] == "MODE":
 
-            elif l[1] == "NOTICE": self.server_log.append(line)
-            elif l[1] == "MODE": self.server_log.append(line)
-            elif l[1].isdigit(): self.server_log.append(line)
-            else: self.chat_history.append(line)
+            #     self.server_log.append(line)
+            #     self.chat_history.append(line)
+
+            # elif l[1].isdigit() and (int(l[1]) in range(  1,   6)
+            #                     or   int(l[1]) in range(250, 256)
+            #                     or   int(l[1]) in range(265, 267)
+            #                     or   int(l[1]) in range(375, 377)
+            #                     or   int(l[1]) == 372):
+
+            #     self.server_log.append(line)
+            # do I need to send a WHO command on join?
+
+            else:
+
+                self.server_log.append(line)
+                self.chat_history.append(line)
 
         self.linebuffer = ""
 
