@@ -18,8 +18,8 @@ class Bouncer(object):
     Networks by maintaining an authoritative record of each connected device.
 
     Attributes:
-        clients (set of Client): A set of connected Clients.
-        networks (dict of Network): A dictionary of connected Networks.
+        clients (set of sputnik.Client): A set of connected Clients.
+        networks (dict of sputnik.Network): A dictionary of connected Networks.
     """
 
     def __init__(self):
