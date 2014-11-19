@@ -69,7 +69,7 @@ class Network(Connection):
         self.server_log = []
         self.chat_history = deque()
 
-        self.send("PASS", self.password) if self.password else None
+        self.send("PASS", self.password or "")
         self.send("NICK", self.nickname)
         self.send("USER", self.username, self.usermode, "*", self.realname)
 
@@ -116,7 +116,7 @@ class Network(Connection):
             elif l[1].isdigit(): self.server_log.append(line)
             else: self.chat_history.append(line)
 
-        else: self.linebuffer = ""
+        self.linebuffer = ""
 
         if self.bouncer.clients:
             while self.chat_history:
