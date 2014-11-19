@@ -11,32 +11,32 @@ class MainHandler(BaseHandler):
         self.render("index.html", networks=self.bouncer.networks)
 
 
-class EditGetHandler(BaseHandler):
+class EditHandler(BaseHandler):
     @tornado.web.addslash
     def get(self, network_name):
         network = self.bouncer.networks[network_name]
         self.render("edit.html", network=network)
 
-
-class EditPostHandler(BaseHandler):
     @tornado.web.addslash
-    def post(self):
+    def post(self, network_name):
+        network = self.bouncer.networks[network_name]
+        network.transport.close()
+
         network_name = self.get_argument("networkname")
         network_address = self.get_argument("networkaddress")
         nickname = self.get_argument("nickname")
         ident = self.get_argument("ident")
+        password = self.get_argument("password")
 
         hostname, port = network_address.split(":")
-
-        network = self.bouncer.networks[network_name]
-        network.transport.close()
 
         self.bouncer.add_network(network=network_name,
                                  hostname=hostname,
                                  port=port,
                                  nickname=nickname,
                                  username=ident,
-                                 realname=ident)
+                                 realname=ident,
+                                 password=password)
 
         self.redirect("/")
 
@@ -44,7 +44,7 @@ class EditPostHandler(BaseHandler):
 class DeleteHandler(BaseHandler):
     @tornado.web.addslash
     def get(self, network_name):
-        if (network_name in self.bouncer.networks):
+        if network_name in self.bouncer.networks:
             network = self.bouncer.networks[network_name]
             network.transport.close()
 
@@ -62,15 +62,17 @@ class AddHandler(BaseHandler):
         network_address = self.get_argument("networkaddress")
         nickname = self.get_argument("nickname")
         ident = self.get_argument("ident")
+        password = self.get_argument("password")
 
         hostname, port = network_address.split(":")
 
-        if (network_name not in self.bouncer.networks):
+        if network_name not in self.bouncer.networks:
             self.bouncer.add_network(network=network_name,
                                      hostname=hostname,
                                      port=port,
                                      nickname=nickname,
                                      username=ident,
-                                     realname=ident)
+                                     realname=ident,
+                                     password=password)
 
         self.redirect("/")
