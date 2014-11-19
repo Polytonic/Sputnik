@@ -22,7 +22,7 @@ class Network(Connection):
     """
 
     def __init__(self, bouncer, network, nickname, username, realname,
-                 password=None, usermode=0):
+                 hostname, port, password=None, usermode=0):
         """Creates an instance of a Network.
 
         This performs a minimum level of string formatting and type coercion in
@@ -34,6 +34,8 @@ class Network(Connection):
             nickname (str): The IRC nickname to use when connecting.
             username (str): The IRC ident to use when connecting.
             realname (str): The real name of the user.
+            hostname (str): The hostname of the IRC network to connect to.
+            port (int): The port to connect using.
             password (str, optional): Bouncer password. Defaults to ``None``.
             usermode (int, optional): The IRC usermode. Defaults to ``0``.
         """
@@ -45,6 +47,8 @@ class Network(Connection):
         self.realname = ":%s" % realname
         self.bouncer = bouncer
         self.network = network
+        self.hostname = hostname
+        self.port = port
 
     def connection_made(self, transport):
         """Registers the connected Network with the Bouncer.
@@ -65,7 +69,7 @@ class Network(Connection):
         self.server_log = []
         self.chat_history = deque()
 
-        self.send("PASS", self.password) if self.password else None
+        self.send("PASS", self.password or "")
         self.send("NICK", self.nickname)
         self.send("USER", self.username, self.usermode, "*", self.realname)
 
@@ -104,15 +108,26 @@ class Network(Connection):
             if   l[0] == "PING": self.send("PONG", l[1])
             elif l[1] == "PONG": self.forward("PONG", l[2])
 
-            # breaks because it can't check for integers because 353 and 366
-            # are related to channel joining and responses etc.
+            # elif l[1] == "NOTICE" or l[1] == "MODE":
 
-            elif l[1] == "NOTICE": self.server_log.append(line)
-            elif l[1] == "MODE": self.server_log.append(line)
-            elif l[1].isdigit(): self.server_log.append(line)
-            else: self.chat_history.append(line)
+            #     self.server_log.append(line)
+            #     self.chat_history.append(line)
 
-        else: self.linebuffer = ""
+            # elif l[1].isdigit() and (int(l[1]) in range(  1,   6)
+            #                     or   int(l[1]) in range(250, 256)
+            #                     or   int(l[1]) in range(265, 267)
+            #                     or   int(l[1]) in range(375, 377)
+            #                     or   int(l[1]) == 372):
+
+            #     self.server_log.append(line)
+            # do I need to send a WHO command on join?
+
+            else:
+
+                self.server_log.append(line)
+                self.chat_history.append(line)
+
+        self.linebuffer = ""
 
         if self.bouncer.clients:
             while self.chat_history:

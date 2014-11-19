@@ -1,4 +1,3 @@
-#! /usr/bin/env python3
 """Sputnik Bouncer Implementation
 
 This module provides the Sputnik Bouncer implementation. As the primary entry
@@ -20,9 +19,9 @@ class Bouncer(object):
     Networks by maintaining an authoritative record of each connected device.
 
     Attributes:
-        clients (set of Client): A set of connected Clients.
-        networks (dict of Network): A dictionary of connected Networks.
-        datastore (Datastore): A database wrapper for handling persistence.
+        clients (set of sputnik.Client): A set of connected Clients.
+        datastore (sputnik.Datastore): A Redis interface.
+        networks (dict of sputnik.Network): A dictionary of connected Networks.
     """
 
     def __init__(self):
@@ -55,31 +54,28 @@ class Bouncer(object):
         coro = loop.create_server(lambda: Client(self),
                                   hostname, port)
         loop.run_until_complete(coro)
-        HTTPServer().start()
+        HTTPServer(self).start()
 
         try: loop.run_forever()
         except KeyboardInterrupt: pass
         finally: loop.close()
 
-    # this is due for a refactor
-    # the exact form of this depends on how the web interface is implemented
-    def add_network(self, hostname, port):
+    def add_network(self, network, hostname, port,
+                    nickname, username, realname,
+                    password=None):
+        """Connects the bouncer to an IRC network.
+
+        This connects to the indicated IRC network using the given credentials.
+        """
 
         loop = asyncio.get_event_loop()
         coro = loop.create_connection(lambda: Network(self,
-                                      network="freenode",
-                                      nickname="Decepticon1337",
-                                      username="Decepticon1337",
-                                      realname="Decepticon1337"),
+                                      network=network,
+                                      nickname=nickname,
+                                      username=username,
+                                      realname=realname,
+                                      hostname=hostname,
+                                      port=port,
+                                      password=password),
                                       hostname, port)
-        loop.run_until_complete(coro)
-
-if __name__ == "__main__":
-    bouncer = Bouncer()
-    bouncer.add_network("irc.freenode.net", 6667)
-    # bouncer.add_network("irc.quakenet.org", 6667)
-    # bouncer.add_network("irc.gamesurge.net", 6667)
-    bouncer.start()
-
-    # eventually should implement __init__.py and __main__.py
-    # other things ... database logging?
+        asyncio.async(coro)

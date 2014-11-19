@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="sputnik-networks-container" class="well form-horizontal">
+    <h3>Edit Network</h3>
+    <div id="networks-container-inner">
+
+    <form id="edit_form" action="/edit/{{ network.network }}/" method="post">
+        {% include network-form.html %}
+    </form>
+
+    </div>
+</div>
+
+{% end %}
+
+{% block network_controls %}
+    <input type="submit" value="SAVE" class="btn btn-sputnik-secondary">
+{% end %}
