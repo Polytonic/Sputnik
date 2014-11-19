@@ -9,6 +9,7 @@ import asyncio
 from client import Client
 from network import Network
 from server import HTTPServer
+from datastore import Datastore
 
 
 class Bouncer(object):
@@ -21,6 +22,7 @@ class Bouncer(object):
     Attributes:
         clients (set of Client): A set of connected Clients.
         networks (dict of Network): A dictionary of connected Networks.
+        datastore (Datastore): A database wrapper for handling persistence.
     """
 
     def __init__(self):
@@ -31,6 +33,8 @@ class Bouncer(object):
 
         self.clients = set()
         self.networks = dict()
+        self.datastore = Datastore()
+
 
     def start(self, hostname="", port=6667):
         """Starts the IRC and HTTP listen servers.

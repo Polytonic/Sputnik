@@ -2,67 +2,98 @@
 
 This module provides the Sputnik Datastore implementation. It defines the 
 behaviors necessary to store and reload channels and networks should the bouncer ever
-unexpectedly go offline.
+unexpectedly go offline. It also stores the bouncer's password in the database.
 """
 
 import redis
 import json
+import bcrypt
 
 class Datastore(object):
     """A singleton that stores all channels and networks connected to by the bouncer.
 
     The Datastore is a feature that stores channel and network information in a database
     so that the bouncer can automatically reconnect to channels and networks in the event
-    that the bouncer unexpectedly goes offline and must be restarted.  The primary function
-    of this class is to act as a write-through cache for channel and network information
-    and act as a wrapper around a redis database that stores this information.
+    that the bouncer unexpectedly goes offline and must be restarted. It also stores the
+    bouncer's password in the database.
 
     Attributes:
-        channels (dict of str): A dictionary of stored channel information.
-            key = '<network>:<channel>'
-            value = '<password>'
-        networks (dict of dict): A dictionary of stored network information.
-            key = '<network>'
-            value = {hostname':'<hostname>', 'port':<port>, 'nickname':'<nickname>',
-                    'username':'<username>', 'realname':'<realname>', 'password':'<password>',
-                    'usermode':<usermode>}
         database (redis database): A redis database session.
     """
+
     def __init__(self, hostname="localhost", port=6379):
         """Creates an instance of a Datastore.
 
-        Initializes an empty dictionary of channel info and populates it with
-        entries stored in the database.
+        Initializes a connection to the database.
 
         Args:
             hostname (str): The hostname for the redis database.
             port (int): The port for the redis database.
         """
 
-        self.channels = {}
-        self.networks = {}
         self.database = redis.StrictRedis(host=hostname, port=port, db=0)
-        self.load_from_database()
 
-    def load_from_database(self):
-        """Loads info stored in the database into the Datastore's dictionaries.
+    def get_networks(self):
+        """Gets dictionary of network information from database.
+
+        Returns:
+            dict = A dictionary of IRC network information.::
+
+                {
+                    'network=<network>' :
+                        {
+                            'hostname':'<hostname>',
+                            'port':<port>,
+                            'nickname':'<nickname>',
+                            'username':'<username>',
+                            'realname':'<realname>',
+                            'password':'<password>',
+                            'usermode':<usermode>
+                        }
+                }
         """
 
-        for key in self.database.keys():
-            decoded_key = key.decode()
+        networks = {}
+        for key in self.database.keys("network=*"):
+            json_val = self.database.get(key).decode()
+            val = json.loads(json_val)
+            networks[key.decode().split("=")[1]] = val
+        return networks
 
-            #If this is a channel
-            if ":" in decoded_key:
-                password = self.database.get(key).decode()
-                if not password:
-                    password = None
-                self.channels[decoded_key] = password
 
-            #If this is a network
-            else:
-                json_val = self.database.get(key).decode()
-                val = json.loads(json_val)
-                self.networks[decoded_key] = val
+    def get_channels(self):
+        """Gets dictionary of channel information from database.
+
+        Returns:
+            dict = A dictionary of channel information.::
+
+                { 'channel=<network>/<channel>' : '<password>' }
+        """
+
+        channels = {}
+        for key in self.database.keys("channel=*"):
+            password = self.database.get(key).decode() or None
+            channels[key.decode().split("=")[1]] = password
+        return channels
+
+    def set_password(self, password="cosmonaut"):
+        """Saves a new bouncer password to the database.
+
+        Args:
+            password (str): The new password for the database.
+        """
+
+        hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+        self.database.set("password=bouncer:password", hashed_password)
+
+    def get_password(self):
+        """Fetches and returns the bouncer password from the database.
+
+        Return:
+            bytes: The encrypted bouncer password.  Check using bcrypt library.
+        """
+
+        return self.database.get("password=bouncer:password")
 
     def add_network(self, network, hostname, port, nickname, username, realname,
                     password=None, usermode=0):
@@ -79,12 +110,18 @@ class Datastore(object):
             usermode (int): The usermode for connecting to the IRC network.
         """
 
-        val = {"hostname":hostname, "port":port, "nickname":nickname,
-                "username":username, "realname":realname, "password":password,
-                "usermode":usermode}
-        self.networks[network] = val
+        val =   {
+                    "hostname":hostname,
+                    "port":port,
+                    "nickname":nickname,
+                    "username":username,
+                    "realname":realname,
+                    "password":password,
+                    "usermode":usermode
+                }
         json_val = json.dumps(val)
-        self.database.set(network, json_val)
+        key = ''.join(("network=", network))
+        self.database.set(key, json_val)
 
     def remove_network(self, network):
         """Removes a network from the networks dictionary and underlying database.
@@ -93,10 +130,10 @@ class Datastore(object):
             network (str): The identifying string for an IRC network.
         """
 
-        self.networks.pop(network, None)
-        self.database.delete(network)
+        key = ''.join(("network=", network))
+        self.database.delete(key)
 
-    def add_channel(self, network, channel, password = None):
+    def add_channel(self, network, channel, password=""):
         """Adds a channel to the channels dictionary and underlying database.
 
         Args:
@@ -105,11 +142,9 @@ class Datastore(object):
             password (str, optional): The password for connection to the channel.
         """
 
-        key = ":".join([network, channel])
-        self.channels[key] = password
-        if not password:
-            password = ""
-        self.database.set(key, password)
+        key = ''.join(("channel=", network, ":", channel))
+        #ensure that None passwords are converted to empty strings for storage
+        self.database.set(key, password or "")
 
     def remove_channel(self, network, channel):
         """Removes a channel from the channel dictionary and underlying database.
@@ -119,6 +154,5 @@ class Datastore(object):
             channel (str): The name of a channel on the IRC network.
         """
 
-        key = ":".join([network, channel])
-        self.channels.pop(key, None)
+        key = ''.join(("channel=", network, ":", channel))
         self.database.delete(key)

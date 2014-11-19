@@ -82,6 +82,31 @@ class Client(Connection):
                     self.send("This Network Does Not Exist", "[C to D]")
                 else: self.broker = self.bouncer.networks[self.network]
 
+            elif l[0] == "JOIN":
+
+                chan = l[1].split(" ")
+                if len(chan) > 1:
+                    self.bouncer.datastore.add_channel  ( 
+                                                            "/".join((self.username, self.network)),
+                                                            chan[0],
+                                                            chan[1]
+                                                        )
+                else:
+                    self.bouncer.datastore.add_channel  ( 
+                                                            "/".join((self.username, self.network)),
+                                                            chan[0]
+                                                        )
+                self.forward(line)
+
+            elif l[0] == "PART":
+
+                chan = l[1].split(" ")
+                self.bouncer.datastore.remove_channel   (
+                                                            "/".join((self.username, self.network)),
+                                                            chan[0]
+                                                        )
+                self.forward(line)
+
             else: self.forward(line)
 
         # this prints the server connection log
