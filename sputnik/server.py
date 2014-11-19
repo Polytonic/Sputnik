@@ -41,8 +41,8 @@ class HTTPServer(tornado.web.Application):
         tornado.platform.asyncio.AsyncIOMainLoop().install()
         super().__init__(debug=os.environ.get("DEBUG"),
                          handlers=routes,
-                         static_path="static",
-                         template_path="templates")
+                         static_path="sputnik/static",
+                         template_path="sputnik/templates")
 
     def start(self, port=8080):
         """Starts the HTTP listen server.
