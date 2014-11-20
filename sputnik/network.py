@@ -100,7 +100,7 @@ class Network(Connection):
 
             if network.connected: return
             asyncio.sleep(2**attempt)
-            attempt_reconnect(attempt + 1)
+            self.attempt_reconnect(attempt + 1)
 
     def connection_lost(self, exc):
         """Unregisters the connected Network from the Bouncer.
@@ -112,7 +112,7 @@ class Network(Connection):
         self.bouncer.networks.pop(self.network)
         if not self.connected:
             print("Bouncer Disconnected from Network")
-        else: attempt_reconnect()
+        else: self.attempt_reconnect()
 
     def data_received(self, data):
         """Handles incoming messages from connected IRC networks.
