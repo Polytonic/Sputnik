@@ -73,6 +73,14 @@ class Network(Connection):
         self.send("NICK", self.nickname)
         self.send("USER", self.username, self.usermode, "*", self.realname)
 
+        #Reconnect to channels in database
+        channels = self.bouncer.datastore.get_channels(self.network)
+        for k, v in channels.items():
+            channel_name = k.split(":")[1]
+            print("".join(["Connecting ", self.network,
+                           " to channel ", channel_name]))
+            self.send("JOIN", channel_name, v or "")
+
     def connection_lost(self, exc):
         """Unregisters the connected Network from the Bouncer.
 
@@ -82,6 +90,9 @@ class Network(Connection):
         """
 
         print("Bouncer Disconnected from Network")
+        #Unsure about falsy-ness of exceptions - not playing with fire
+        if exc is None:
+            self.bouncer.datastore.remove_network(self.network)
         self.bouncer.networks.pop(self.network)
 
     def data_received(self, data):

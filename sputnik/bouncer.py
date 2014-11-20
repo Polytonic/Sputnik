@@ -8,6 +8,7 @@ import asyncio
 from client import Client
 from network import Network
 from server import HTTPServer
+from datastore import Datastore
 
 
 class Bouncer(object):
@@ -19,6 +20,7 @@ class Bouncer(object):
 
     Attributes:
         clients (set of sputnik.Client): A set of connected Clients.
+        datastore (sputnik.Datastore): A Redis interface.
         networks (dict of sputnik.Network): A dictionary of connected Networks.
     """
 
@@ -30,6 +32,13 @@ class Bouncer(object):
 
         self.clients = set()
         self.networks = dict()
+        self.datastore = Datastore()
+
+        #Initialize stored network connections
+        networks = self.datastore.get_networks()
+        for k, v in networks.items():
+            self.add_network(k, **v)
+
 
     def start(self, hostname="", port=6667):
         """Starts the IRC and HTTP listen servers.
@@ -58,12 +67,19 @@ class Bouncer(object):
 
     def add_network(self, network, hostname, port,
                     nickname, username, realname,
-                    password=None):
+                    password=None, usermode=0):
         """Connects the bouncer to an IRC network.
 
         This connects to the indicated IRC network using the given credentials.
         """
 
+        self.datastore.add_network(network,
+                                   hostname,
+                                   port,
+                                   nickname,
+                                   username,
+                                   realname,
+                                   password)
         loop = asyncio.get_event_loop()
         coro = loop.create_connection(lambda: Network(self,
                                       network=network,
