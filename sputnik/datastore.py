@@ -18,7 +18,7 @@ class Datastore(object):
     bouncer's password in the database.
 
     Attributes:
-        database (redis database): A redis database session.
+        database (Redis database): A Redis database session.
     """
 
     def __init__(self, hostname="localhost", port=6379):
@@ -27,8 +27,8 @@ class Datastore(object):
         Initializes a connection to the database.
 
         Args:
-            hostname (str): The hostname for the redis database.
-            port (int): The port for the redis database.
+            hostname (str): The hostname for the Redis database.
+            port (int): The port for the Redis database.
         """
 
         self.database = redis.StrictRedis(host=hostname, port=port, db=0)
@@ -40,15 +40,15 @@ class Datastore(object):
             dict = A dictionary of IRC network information.::
 
                 {
-                    'network=<network>' :
+                    "<network>" :
                         {
-                            'hostname':'<hostname>',
-                            'port':<port>,
-                            'nickname':'<nickname>',
-                            'username':'<username>',
-                            'realname':'<realname>',
-                            'password':'<password>',
-                            'usermode':<usermode>
+                            "hostname" : "<hostname>",
+                            "port" : <port>,
+                            "nickname" : "<nickname>",
+                            "username" : "<username>",
+                            "realname" : "<realname>",
+                            "password" : "<password>",
+                            "usermode" : <usermode>
                         }
                 }
         """
@@ -61,17 +61,22 @@ class Datastore(object):
         return networks
 
 
-    def get_channels(self):
-        """Gets dictionary of channel information from database.
+    def get_channels(self, network=""):
+        """Gets dictionary of channel information from database.  If a
+        network is passed in, then only channels for that network are
+        returned.
+
+        Args:
+            network (str) = The address for an IRC network.
 
         Returns:
             dict = A dictionary of channel information.::
 
-                { 'channel=<network>/<channel>' : '<password>' }
+                { "<network>/<channel>" : "<password>" }
         """
 
         channels = {}
-        for key in self.database.keys("channel=*"):
+        for key in self.database.keys("".join(["channel=", network, "*"])):
             password = self.database.get(key).decode() or None
             channels[key.decode().split("=")[1]] = password
         return channels
@@ -120,7 +125,7 @@ class Datastore(object):
                     "usermode":usermode
                 }
         json_val = json.dumps(val)
-        key = ''.join(("network=", network))
+        key = "".join(["network=", network])
         self.database.set(key, json_val)
 
     def remove_network(self, network):
@@ -130,7 +135,7 @@ class Datastore(object):
             network (str): The identifying string for an IRC network.
         """
 
-        key = ''.join(("network=", network))
+        key = "".join(["network=", network])
         self.database.delete(key)
 
     def add_channel(self, network, channel, password=""):
@@ -142,7 +147,7 @@ class Datastore(object):
             password (str, optional): The password for connection to the channel.
         """
 
-        key = ''.join(("channel=", network, ":", channel))
+        key = "".join(["channel=", network, ":", channel])
         #ensure that None passwords are converted to empty strings for storage
         self.database.set(key, password or "")
 
@@ -154,5 +159,5 @@ class Datastore(object):
             channel (str): The name of a channel on the IRC network.
         """
 
-        key = ''.join(("channel=", network, ":", channel))
+        key = "".join(["channel=", network, ":", channel])
         self.database.delete(key)

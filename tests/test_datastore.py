@@ -20,6 +20,10 @@ class TestDatastore(unittest.TestCase):
         self.assertEqual(channels["quakenet:test54321"], "somepassword")
         self.assertEqual(channels["quakenet:test12345"], "otherpassword")
 
+        #teset get_channels() with specific network
+        channels = self.datastore.get_channels("quakenet")
+        self.assertEqual(len(channels), 2)
+
         #test remove_channel()
         self.datastore.remove_channel("quakenet", "test12345")
         channels = self.datastore.get_channels()
@@ -78,5 +82,5 @@ class TestDatastore(unittest.TestCase):
         self.assertEqual(bcrypt.hashpw("newpassword".encode(), stored_password),
                         stored_password)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

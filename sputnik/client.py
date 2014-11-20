@@ -77,34 +77,30 @@ class Client(Connection):
             if   l[0] == "QUIT": pass  # Suppress the QUIT Command
             elif l[0] == "USER":
 
-                self.username, self.network = l[1].split(" ")[0].split("/")
+                self.network = l[1].split(" ")[0]
                 if self.network not in self.bouncer.networks:
                     self.send("This Network Does Not Exist", "[C to D]")
                 else: self.broker = self.bouncer.networks[self.network]
 
             elif l[0] == "JOIN":
 
-                chan = l[1].split(" ")
-                if len(chan) > 1:
-                    self.bouncer.datastore.add_channel  ( 
-                                                            "/".join((self.username, self.network)),
-                                                            chan[0],
-                                                            chan[1]
-                                                        )
-                else:
-                    self.bouncer.datastore.add_channel  ( 
-                                                            "/".join((self.username, self.network)),
-                                                            chan[0]
-                                                        )
+                channels = l[1].split(",")
+                for channel in channels:
+                    channel_info = channel.split(" ")
+                    network_name = self.network
+                    channel_name = channel_info[0]
+                    channel_password = channel_info[1] if len(channel_info) > 1 else None
+                    self.bouncer.datastore.add_channel(network_name,
+                                                       channel_name,
+                                                       channel_password)
                 self.forward(line)
 
             elif l[0] == "PART":
 
-                chan = l[1].split(" ")
-                self.bouncer.datastore.remove_channel   (
-                                                            "/".join((self.username, self.network)),
-                                                            chan[0]
-                                                        )
+                network_name = self.network
+                channel_name = l[1].split(" ")[0]
+                self.bouncer.datastore.remove_channel(network_name,
+                                                      channel_name)
                 self.forward(line)
 
             else: self.forward(line)

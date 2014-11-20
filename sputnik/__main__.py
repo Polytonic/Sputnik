@@ -2,8 +2,8 @@
 from bouncer import Bouncer
 
 bnc = Bouncer()
-bnc.add_network("freenode", "irc.freenode.net", 6667,
-                nickname="Decepticon1337",
-                username="Decepticon1337",
-                realname="Decepticon1337")
+#bnc.add_network("Bouncy9001/freenode", "irc.freenode.net", 6667,
+#                nickname="Decepticon1337",
+#                username="Decepticon1337",
+#                realname="Decepticon1337")
 bnc.start()
