@@ -102,13 +102,3 @@ class Client(Connection):
         if self.broker and not self.ready:
             for line in self.broker.server_log: self.send(line)
             self.ready = True
-
-    # this will eventually be refactored into the Connection class
-    # ideally accepting the Transport directly, with control flow logic moved
-    # back into the controller (i.e. data_received)
-    def forward(self, *args):
-
-        message = self.normalize(" ".join(args))
-        if self.broker:
-            self.broker.transport.write(message.encode())
-            print("[C to B]\t%s" % message, end="")

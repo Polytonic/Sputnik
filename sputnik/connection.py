@@ -48,16 +48,21 @@ class Connection(asyncio.Protocol):
         message = self.normalize(" ".join(args))
         self.transport.write(message.encode())
 
-    # this will eventually be refactored to include the Client-based
-    # implementation of forward(), most likely accepting the transport as a
-    # parameter and performing any logic in-line.
-
     def forward(self, *args):
+        """Writes a message to the foreign transport.
+
+        If the connection is a client, this writes a message to the network
+        transport, whereas if the connection is a network, then this writes a
+        message to the client transport. This is a counterpart to `::send()` to
+        allow connections to write messages to their intended destinations
+        after intercepting and parsing their contents.
+
+        Args:
+            args (list of str): A list of strings to concatenate.
+        """
 
         message = self.normalize(" ".join(args))
         for client in self.bouncer.clients:
             if client.broker == self:
                 client.transport.write(message.encode())
-                print("[B to C]\t%s" % message, end="")
-
-# these could really be module level functions probably ...
+                print("%s" % message, end="")
