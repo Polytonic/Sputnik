@@ -144,3 +144,19 @@ class Network(Connection):
             while self.chat_history:
                 line = self.chat_history.popleft()
                 self.forward(line)
+
+    def forward(self, *args):
+        """Writes a message to all connected CLients.
+
+        Because the Network represents an instance of a connection to an IRC
+        network, we instead need to write to the transports of all clients.
+
+        Args:
+            args (list of str): A list of strings to concatenate.
+        """
+
+        message = self.normalize(" ".join(args))
+        for client in self.bouncer.clients:
+            if client.broker == self:
+                client.transport.write(message.encode())
+                print("[B to C]%s" % message, end="")

@@ -102,3 +102,19 @@ class Client(Connection):
         if self.broker and not self.ready:
             for line in self.broker.server_log: self.send(line)
             self.ready = True
+
+    def forward(self, *args):
+        """Writes a message to the Network.
+
+        Because the Client represents an instance of a connection from an IRC
+        client, we instead need to write to the transport associated with the
+        connected network.
+
+        Args:
+            args (list of str): A list of strings to concatenate.
+        """
+
+        message = self.normalize(" ".join(args))
+        if self.broker:
+            self.broker.transport.write(message.encode())
+            print("[C to B]\t%s" % message, end="")
