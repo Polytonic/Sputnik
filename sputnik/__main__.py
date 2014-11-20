@@ -1,9 +1,9 @@
 #! /usr/bin/env python3
-from bouncer import Bouncer
+"""Sputnik Main Runtime
 
-bnc = Bouncer()
-# bnc.add_network("Decepticon1337/freenode", "irc.freenode.net", 6667,
-#                 nickname="Decepticon1337",
-#                 username="Decepticon1337",
-#                 realname="Decepticon1337")
-bnc.start()
+This implements the Sputnik main file, allowing users to run the Sputnik
+bouncer from the project root as a folder. e.g. `python3 sputnik`.
+"""
+
+from bouncer import Bouncer
+Bouncer().start()
