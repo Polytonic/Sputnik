@@ -66,7 +66,7 @@ class Bouncer(object):
     def add_network(self, network, hostname, port,
                     nickname, username, realname,
                     password=None, usermode=0):
-        """Connects the bouncer to an IRC network.
+        """Connects the Bouncer to an IRC network.
 
         This forms the credentials into a dictionary. It then registers the
         network in the datastore, and connects to the indicated IRC network.
@@ -97,6 +97,14 @@ class Bouncer(object):
         asyncio.async(coro)
 
     def remove_network(self, network):
+        """Removes a network from the Bouncer.
+
+        This disconnects the Bouncer from the indicated network and unregisters
+        the network from the datastore.
+
+        Args:
+            network (str): the name of a network.
+        """
 
         if network in self.networks:
             self.networks[network].transport.close()
