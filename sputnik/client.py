@@ -84,37 +84,24 @@ class Client(Connection):
 
             elif l[0] == "JOIN":
 
-                channels = l[1].split(",")
-                for channel in channels:
-                    channel_info = channel.split(" ")
-                    network_name = self.network
-                    channel_name = channel_info[0]
-                    channel_password = channel_info[1] if len(channel_info) > 1 else None
-                    self.bouncer.datastore.add_channel(network_name,
-                                                       channel_name,
-                                                       channel_password)
+                for channel in l[1].split(","):
+                    channel = channel.split(" ")
+                    password = channel[1] if len(channel) > 1 else None
+                    self.bouncer.datastore.add_channel(
+                        self.network, channel[0], password)
                 self.forward(line)
 
             elif l[0] == "PART":
 
-                network_name = self.network
-                channel_name = l[1].split(" ")[0]
-                self.bouncer.datastore.remove_channel(network_name,
-                                                      channel_name)
+                self.bouncer.datastore.remove_channel(
+                    self.network, l[1].split(" ")[0])
                 self.forward(line)
 
             else: self.forward(line)
 
-        # this prints the server connection log
-        # there is a race condition here
-
         if self.broker and not self.ready:
             for line in self.broker.server_log: self.send(line)
             self.ready = True
-
-        # can try to message the client, say "I'm not ready yet, and then
-        # terminate the connection?"
-        # need to check IRC status code and bundle this into the "USER" check
 
     # this will eventually be refactored into the Connection class
     # ideally accepting the Transport directly, with control flow logic moved

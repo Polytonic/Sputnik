@@ -21,8 +21,9 @@ class Network(Connection):
         ??? (revisit this later)
     """
 
-    def __init__(self, bouncer, network, nickname, username, realname,
-                 hostname, port, password=None, usermode=0):
+    def __init__(self, bouncer, network, hostname, port,
+                 nickname, username, realname,
+                 password=None, usermode=0):
         """Creates an instance of a Network.
 
         This performs a minimum level of string formatting and type coercion in
@@ -31,11 +32,11 @@ class Network(Connection):
         Args:
             bouncer (sputnik.Bouncer): The singleton Bouncer instance.
             network (str): The name of the IRC network to connect to.
+            hostname (str): The hostname of the IRC network to connect to.
+            port (int): The port to connect using.
             nickname (str): The IRC nickname to use when connecting.
             username (str): The IRC ident to use when connecting.
             realname (str): The real name of the user.
-            hostname (str): The hostname of the IRC network to connect to.
-            port (int): The port to connect using.
             password (str, optional): Bouncer password. Defaults to ``None``.
             usermode (int, optional): The IRC usermode. Defaults to ``0``.
         """
@@ -73,13 +74,10 @@ class Network(Connection):
         self.send("NICK", self.nickname)
         self.send("USER", self.username, self.usermode, "*", self.realname)
 
-        #Reconnect to channels in database
         channels = self.bouncer.datastore.get_channels(self.network)
-        for k, v in channels.items():
-            channel_name = k.split(":")[1]
-            print("".join(["Connecting ", self.network,
-                           " to channel ", channel_name]))
-            self.send("JOIN", channel_name, v or "")
+        for channel_info, password in channels.items():
+            channel_name = channel_info.split(":")[1]
+            self.send("JOIN", channel_name, password or "")
 
     def connection_lost(self, exc):
         """Unregisters the connected Network from the Bouncer.
@@ -90,10 +88,12 @@ class Network(Connection):
         """
 
         print("Bouncer Disconnected from Network")
-        #Unsure about falsy-ness of exceptions - not playing with fire
-        if exc is None:
-            self.bouncer.datastore.remove_network(self.network)
         self.bouncer.networks.pop(self.network)
+
+        # This should only be called on *unexpected* disconnections.
+        # Unsure about falsy-ness of exceptions - not playing with fire
+        # if exc is None:
+        #     self.bouncer.datastore.remove_network(self.network)
 
     def data_received(self, data):
         """Handles incoming messages from connected IRC networks.
@@ -144,12 +144,3 @@ class Network(Connection):
             while self.chat_history:
                 line = self.chat_history.popleft()
                 self.forward(line)
-
-        # only reset the linebuffer if the server_log is successfully
-        # replayed to a client
-        # need to periodically PING the client to check if it's still active
-        # need to intercept QUIT message
-        # quit -> AWAY?
-        # load plugins
-        # need to validate the auth flow to handle if a user connects with
-        # invalid credentials

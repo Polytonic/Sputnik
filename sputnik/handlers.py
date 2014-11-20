@@ -6,6 +6,7 @@ RequestHandlers handle GET and POST requests sent from the web interface.
 
 import tornado.web
 
+
 class BaseHandler(tornado.web.RequestHandler):
     """The base RequestHandler that stores the bouncer for RequestHandlers."""
 

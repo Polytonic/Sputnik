@@ -6,9 +6,9 @@ point, the Bouncer is responsible for bootstrapping the entire program.
 
 import asyncio
 from client import Client
+from datastore import Datastore
 from network import Network
 from server import HTTPServer
-from datastore import Datastore
 
 
 class Bouncer(object):
@@ -27,18 +27,17 @@ class Bouncer(object):
     def __init__(self):
         """Creates an instance of a Bouncer.
 
-        Initializes an empty set and an empty dictionary for later use.
+        Initializes an empty set and an empty dictionary for later use, then
+        reloads previously connected networks from the Datastore.
         """
 
         self.clients = set()
         self.networks = dict()
-        self.datastore = Datastore()
+        self.datastore = Datastore(hostname="localhost", port="6379")
 
-        #Initialize stored network connections
-        networks = self.datastore.get_networks()
-        for k, v in networks.items():
-            self.add_network(k, **v)
-
+        history = self.datastore.get_networks()
+        for credentials in history.values():
+            self.add_network(**credentials)
 
     def start(self, hostname="", port=6667):
         """Starts the IRC and HTTP listen servers.
@@ -56,8 +55,7 @@ class Bouncer(object):
         """
 
         loop = asyncio.get_event_loop()
-        coro = loop.create_server(lambda: Client(self),
-                                  hostname, port)
+        coro = loop.create_server(lambda: Client(self), hostname, port)
         loop.run_until_complete(coro)
         HTTPServer(self).start()
 
@@ -70,24 +68,30 @@ class Bouncer(object):
                     password=None, usermode=0):
         """Connects the bouncer to an IRC network.
 
-        This connects to the indicated IRC network using the given credentials.
+        This forms the credentials into a dictionary. It then registers the
+        network in the datastore, and connects to the indicated IRC network.
+
+        Args:
+            network (str): The name of the IRC network to connect to.
+            hostname (str): The hostname of the IRC network to connect to.
+            port (int): The port to connect using.
+            nickname (str): The IRC nickname to use when connecting.
+            username (str): The IRC ident to use when connecting.
+            realname (str): The real name of the user.
+            password (str, optional): Bouncer password. Defaults to ``None``.
+            usermode (int, optional): The IRC usermode. Defaults to ``0``.
         """
 
-        self.datastore.add_network(network,
-                                   hostname,
-                                   port,
-                                   nickname,
-                                   username,
-                                   realname,
-                                   password)
+        credentials = { "network"  : network,
+                        "nickname" : nickname,
+                        "username" : username,
+                        "realname" : realname,
+                        "hostname" : hostname,
+                        "port"     : port,
+                        "password" : password }
+
+        self.datastore.add_network(**credentials)
         loop = asyncio.get_event_loop()
-        coro = loop.create_connection(lambda: Network(self,
-                                      network=network,
-                                      nickname=nickname,
-                                      username=username,
-                                      realname=realname,
-                                      hostname=hostname,
-                                      port=port,
-                                      password=password),
+        coro = loop.create_connection(lambda: Network(self, **credentials),
                                       hostname, port)
         asyncio.async(coro)
