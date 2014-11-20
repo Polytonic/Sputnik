@@ -159,4 +159,4 @@ class Network(Connection):
         for client in self.bouncer.clients:
             if client.broker == self:
                 client.transport.write(message.encode())
-                print("[B to C]%s" % message, end="")
+                print("[B to C]\t%s" % message, end="")
