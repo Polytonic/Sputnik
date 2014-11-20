@@ -5,7 +5,7 @@ from sputnik import datastore
 
 class TestDatastore(unittest.TestCase):
     def setUp(self):
-        self.datastore = datastore.Datastore()
+        self.datastore = datastore.Datastore(hostname="localhost", port="6379")
 
     def test_channels(self):
         #set up with add_channel()
@@ -38,7 +38,7 @@ class TestDatastore(unittest.TestCase):
 
     def test_networks(self):
         #set up with add_network()
-        self.datastore.add_network("freenode", "irc.freenode.net", 6667, 
+        self.datastore.add_network("freenode", "irc.freenode.net", 6667,
             "freenick", "freeuser", "freereal", "somepassword", 1)
         self.datastore.add_network("quakenet", "irc.quakenet.net", 6668,
             "quakenick", "quakeuser", "quakereal")
