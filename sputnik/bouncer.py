@@ -107,5 +107,6 @@ class Bouncer(object):
         """
 
         if network in self.networks:
+            self.networks[network].connected = False
             self.networks[network].transport.close()
         self.datastore.remove_network(network)

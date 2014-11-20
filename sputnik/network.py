@@ -51,8 +51,6 @@ class Network(Connection):
         self.hostname = hostname
         self.port = port
 
-        self.connected = False
-
     def connection_made(self, transport):
         """Registers the connected Network with the Bouncer.
 
@@ -68,7 +66,6 @@ class Network(Connection):
         self.bouncer.networks[self.network] = self
 
         self.connected = True
-        
         self.transport = transport
         self.linebuffer = ""
         self.server_log = []
@@ -83,27 +80,28 @@ class Network(Connection):
             channel_name = channel_info.split(":")[1]
             self.send("JOIN", channel_name, password or "")
 
-    def disconnect(self):
-        """
-        Simple wrapper for cleanly disconnecting from this network.
-        """
-        self.connected = False
-        self.transport.close()
+    def attempt_reconnect(self, attempt=0, retries=5):
+        """Attempts to reconnect to a network that unexpectedly disconnected.
 
-    def attempt_reconnect(self):
-    """
-    Attempts to reconnect to a network that was unexpectedly disconnected.
-    This should only be called if we lose a connection and still have the 
-    connected flag set. 
-    """
-        for i in range(4,9):
-            newcon = Network(self.bouncer,self.network,self.nickname,self.username,
-                            self.realname,self.password,self.usermode)
-            asyncio.sleep( (2 ** i) + 2)
-            if (newcon.connected):
-                print("Reconnected!")
-                break
-    
+        This is only called if we drop the connection to a network and the
+        connected flag is set, to distinguish from intentional disconnects.
+
+        Args:
+            attempt (int): The current attempt count.
+            retries (int): The number of times to attempt to reconnect.
+        """
+
+        if attempt <= retries:
+
+            network = self.bouncer.add_network(
+                self.network, self.hostname, self.port,
+                self.nickname, self.username,
+                self.password, self.usermode)
+
+            if network.connected: return
+            asyncio.sleep(2**attempt)
+            attempt_reconnect(attempt + 1)
+
     def connection_lost(self, exc):
         """Unregisters the connected Network from the Bouncer.
 
@@ -112,11 +110,9 @@ class Network(Connection):
         should be no remaining references to this instance of the Network.
         """
         self.bouncer.networks.pop(self.network)
-        if(self.connected):
-            print("Unexpected Disconnect")
-            attempt_reconnect()
-        else:
+        if not self.connected:
             print("Bouncer Disconnected from Network")
+        else: attempt_reconnect()
 
     def data_received(self, data):
         """Handles incoming messages from connected IRC networks.
