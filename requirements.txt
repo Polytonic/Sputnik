@@ -1,4 +1,4 @@
 tornado>=4.0.x
-redis>=2.10.3
-cffi>=0.8.6
-bcrypt>=1.0.2
+redis>=2.10.x
+cffi>=0.8.x
+bcrypt>=1.0.x
