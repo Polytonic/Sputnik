@@ -4,6 +4,13 @@ python:
 install: pip install -r requirements.txt
 script:
   - python3 -m unittest
+services:
+  - redis-server
+
+after_success:
+  - sphinx-apidoc -f -o docs sputnik
+  - cd docs && make dirhtml
+
 deploy:
   provider: heroku
   api_key:

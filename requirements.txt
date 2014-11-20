@@ -1,1 +1,5 @@
-aiohttp >= 0.9.x
+bcrypt>=1.0.x
+cffi>=0.8.x
+redis>=2.10.x
+sphinx>=1.3b1
+tornado>=4.0.x
