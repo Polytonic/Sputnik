@@ -1,17 +1,16 @@
-"""Sputnik Tornado Web RequestHandlers Implementation
+"""Sputnik Request Handlers
 
-This module provides the Sputnik Tornado Web RequestHandlers implementation.
-RequestHandlers handle GET and POST requests sent from the web interface.
+This module provides Tornado Request Handlers for the Sputnik Web Interface.
 """
 
 import tornado.web
 
 
 class BaseHandler(tornado.web.RequestHandler):
-    """The base RequestHandler that stores the bouncer for RequestHandlers."""
+    """A base handler that stores the Bouncer singleton."""
 
     def initialize(self, bouncer):
-        """Initializes this RequestHandler and stores the bouncer.
+        """Initializes the RequestHandler and stores the Bouncer.
 
         Args:
             bouncer (sputnik.Bouncer): The singleton Bouncer instance.
@@ -77,7 +76,6 @@ class EditHandler(BaseHandler):
         nickname = self.get_argument("nickname")
         ident = self.get_argument("ident")
         password = self.get_argument("password")
-
         hostname, port = network_address.split(":")
 
         self.bouncer.add_network(network=network_name,
@@ -140,7 +138,6 @@ class AddHandler(BaseHandler):
         nickname = self.get_argument("nickname")
         ident = self.get_argument("ident")
         password = self.get_argument("password")
-
         hostname, port = network_address.split(":")
 
         if network_name not in self.bouncer.networks:
