@@ -90,11 +90,6 @@ class Network(Connection):
         print("Bouncer Disconnected from Network")
         self.bouncer.networks.pop(self.network)
 
-        # This should only be called on *unexpected* disconnections.
-        # Unsure about falsy-ness of exceptions - not playing with fire
-        # if exc is None:
-        #     self.bouncer.datastore.remove_network(self.network)
-
     def data_received(self, data):
         """Handles incoming messages from connected IRC networks.
 

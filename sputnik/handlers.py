@@ -68,8 +68,7 @@ class EditHandler(BaseHandler):
             network_name (str): Network name of the network to edit.
         """
 
-        network = self.bouncer.networks[network_name]
-        network.transport.close()
+        self.bouncer.remove_network(network_name)
 
         network_name = self.get_argument("networkname")
         network_address = self.get_argument("networkaddress")
@@ -100,10 +99,7 @@ class DeleteHandler(BaseHandler):
             network_name (str): Network name of the network to delete.
         """
 
-        if network_name in self.bouncer.networks:
-            network = self.bouncer.networks[network_name]
-            network.transport.close()
-
+        self.bouncer.remove_network(network_name)
         self.redirect("/")
 
 

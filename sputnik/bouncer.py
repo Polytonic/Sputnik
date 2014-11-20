@@ -95,3 +95,9 @@ class Bouncer(object):
         coro = loop.create_connection(lambda: Network(self, **credentials),
                                       hostname, port)
         asyncio.async(coro)
+
+    def remove_network(self, network):
+
+        if network in self.networks:
+            self.networks[network].transport.close()
+        self.datastore.remove_network(network)
