@@ -79,7 +79,10 @@ class Datastore(object):
             str: The encrypted Bouncer password.
         """
 
-        return self.database.get("password=bouncer:password").decode()
+        password = self.database.get("password=bouncer:password")
+        if password:
+            return password.decode()
+        return None
 
     def set_password(self, password="cosmonaut"):
         """Saves a new Bouncer password to Redis.
@@ -107,13 +110,13 @@ class Datastore(object):
             usermode (int, optional): The IRC usermode. Defaults to ``0``.
         """
 
-        credentials = { "network"  : network,
-                        "nickname" : nickname,
-                        "username" : username,
-                        "realname" : realname,
-                        "hostname" : hostname,
-                        "port"     : port,
-                        "password" : password }
+        credentials = {"network": network,
+                       "nickname": nickname,
+                       "username": username,
+                       "realname": realname,
+                       "hostname": hostname,
+                       "port": port,
+                       "password": password}
 
         key = "".join(["network=", network])
         self.database.set(key, json.dumps(credentials))
