@@ -36,6 +36,9 @@ class Datastore(object):
         if hostname and port: redis_url = "redis://%s:%s" % (hostname, port)
         self.database = redis.from_url(os.getenv("REDISTOGO_URL", redis_url))
 
+        if not self.database.get("password=bouncer:password"):
+            self.set_password()
+
     def get_networks(self):
         """Retrieves all connected networks from Redis.
 
@@ -93,6 +96,19 @@ class Datastore(object):
 
         hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
         self.database.set("password=bouncer:password", hashed_password)
+
+    def check_password(self, password_attempt):
+        """Checks a password attempt against the Bouncer password.
+
+        Args:
+            password_attempt (str): The password attempt.
+
+        Returns:
+            bool: Whether the password matched.
+        """
+
+        password = self.get_password()
+        return bcrypt.hashpw(password_attempt.encode(), password) == password
 
     def add_network(self, network, hostname, port,
                     nickname, username, realname,

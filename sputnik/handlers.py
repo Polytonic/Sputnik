@@ -18,6 +18,9 @@ class BaseHandler(tornado.web.RequestHandler):
 
         self.bouncer = bouncer
 
+    def get_current_user(self):
+        return self.get_secure_cookie("user")
+
 
 class MainHandler(BaseHandler):
     """The main RequestHandler that serves the home page.
@@ -25,6 +28,7 @@ class MainHandler(BaseHandler):
     The home page displays the current list of networks.
     """
 
+    @tornado.web.authenticated
     @tornado.web.addslash
     def get(self):
         """Renders the home page.
@@ -43,6 +47,7 @@ class EditHandler(BaseHandler):
     new settings.
     """
 
+    @tornado.web.authenticated
     @tornado.web.addslash
     def get(self, network_name):
         """Renders the edit network page.
@@ -57,6 +62,7 @@ class EditHandler(BaseHandler):
         network = self.bouncer.networks[network_name]
         self.render("edit.html", network=network)
 
+    @tornado.web.authenticated
     @tornado.web.addslash
     def post(self, network_name):
         """Handles edit network requests.
@@ -91,6 +97,7 @@ class EditHandler(BaseHandler):
 class DeleteHandler(BaseHandler):
     """The RequestHandler that handles delete network requests."""
 
+    @tornado.web.authenticated
     @tornado.web.addslash
     def get(self, network_name):
         """Handles delete network requests.
@@ -111,6 +118,7 @@ class AddHandler(BaseHandler):
     is not added.
     """
 
+    @tornado.web.authenticated
     @tornado.web.addslash
     def get(self):
         """Renders the add network page.
@@ -121,6 +129,7 @@ class AddHandler(BaseHandler):
 
         self.render("add.html")
 
+    @tornado.web.authenticated
     @tornado.web.addslash
     def post(self):
         """Handles add network requests.
@@ -146,3 +155,87 @@ class AddHandler(BaseHandler):
                                      password=password)
 
         self.redirect("/")
+
+
+class LoginHandler(BaseHandler):
+    """The RequestHandler that serves the login page.
+
+    The login page prompts the user for their password and authenticates them
+    when the password matches the one stored by the bouncer in its database.
+    """
+
+    @tornado.web.addslash
+    def get(self):
+        """Renders the login page.
+
+        The login page uses a form to ask the user for their password.
+        """
+
+        self.render("login.html")
+
+    @tornado.web.addslash
+    def post(self):
+        """Handles login requests.
+
+        Checks the password against the stored password and authenticates.
+        """
+
+        password = self.get_argument("password")
+
+        if self.bouncer.datastore.check_password(password):
+            self.set_secure_cookie("user", "securestringneeded")
+
+        self.redirect("/")
+
+
+class LogoutHandler(BaseHandler):
+    """The RequestHandler that handles log out requests.
+
+    Redirects to the homepage after clearing authentication.
+    """
+
+    @tornado.web.authenticated
+    @tornado.web.addslash
+    def get(self):
+        """Handles log out requests.
+
+        Redirects to the homepage after clearing authentication.
+        """
+
+        self.clear_cookie("user")
+        self.redirect("/")
+
+
+class SettingsHandler(BaseHandler):
+    """The RequestHandler that serves the settings page.
+
+    Allows users to change their password.
+    """
+
+    @tornado.web.authenticated
+    @tornado.web.addslash
+    def get(self):
+        """Renders the settings page.
+
+        The settings page uses a form to allow users to change their password.
+        """
+
+        self.render("settings.html")
+
+    @tornado.web.authenticated
+    @tornado.web.addslash
+    def post(self):
+        """Handles settings requests.
+
+        Change password requests require the current password to match and
+        two entries of the new password to match.
+        """
+
+        current = self.get_argument("current-password")
+        new_1 = self.get_argument("new-password-1")
+        new_2 = self.get_argument("new-password-2")
+
+        if self.bouncer.datastore.check_password(current) and new_1 == new_2:
+            self.bouncer.datastore.set_password(new_1)
+
+        self.render("settings.html")

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="sputnik-networks-container" class="well form-horizontal">
+    <div class="server panel panel-default">
+
+        <form id="password_form" action="/settings/" method="post">
+
+            <div class="server-title panel-heading">
+                <h3 class="panel-title">Settings</h3>
+            </div>
+
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="ident" class="col-lg-2 control-label">Current Password</label>
+                    <div class="col-lg-10">
+                        <input type="password" class="form-control" name="current-password" placeholder="Enter your current password" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="ident" class="col-lg-2 control-label">New Password</label>
+                    <div class="col-lg-10">
+                        <input type="password" class="form-control" id="new-password-1" name="new-password-1" placeholder="Enter your new password" required oninput="checkIfPasswordsMatch()">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="ident" class="col-lg-2 control-label">Repeat New Password</label>
+                    <div class="col-lg-10">
+                        <input type="password" class="form-control" id="new-password-2" name="new-password-2" placeholder="Repeat your new password" required oninput="checkIfPasswordsMatch()">
+                    </div>
+                </div>
+
+                <div class="pull-right">
+                    <input type="submit" value="CHANGE PASSWORD" class="btn btn-sputnik-secondary">
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+    var passwordField1 = document.getElementById("new-password-1");
+    var passwordField2 = document.getElementById("new-password-2");
+
+    function checkIfPasswordsMatch() {
+        var password1 = passwordField1.value;
+        var password2 = passwordField2.value;
+
+        if (password1 != password2) {
+            passwordField2.setCustomValidity("Passwords don't match!");
+        } else {
+            passwordField2.setCustomValidity("");
+        }
+    }
+</script>
+
+{% end %}
