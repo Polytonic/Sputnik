@@ -16,6 +16,24 @@ class Connection(asyncio.Protocol):
     performed on messages.
     """
 
+    def decode(self, line):
+        """Attempts to decode a line as UTF-8, with fallback to Latin-1.
+
+        We try to maintain a full-Unicode presence where possible. However, not
+        all IRC servers are encoding using UTF-8, so we shadow `str.decode()`
+        and provide a fallback to Latin-1 when needed.
+
+        Args:
+            line (str): A byte-string message to decode.
+
+        Returns:
+            str: A decoded message.
+        """
+
+        try: return line.decode()
+        except UnicodeDecodeError:
+            return line.decode("latin1")
+
     def normalize(self, line, ending="\r\n"):
         """Ensures that a line is terminated with the correct line endings.
 

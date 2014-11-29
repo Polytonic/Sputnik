@@ -125,7 +125,7 @@ class Network(Connection):
         and perform actions as appropriate.
         """
 
-        data = data.decode()
+        data = self.decode(data)
         if not data.endswith("\r\n"):
             self.linebuffer += data
             return

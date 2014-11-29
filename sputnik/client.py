@@ -71,7 +71,7 @@ class Client(Connection):
         perform actions as appropriate.
         """
 
-        for line in data.decode().rstrip().split("\r\n"):
+        for line in self.decode(data).rstrip().split("\r\n"):
             l = line.split(" ", 1)
 
             if   l[0] == "QUIT": pass  # Suppress the QUIT Command
