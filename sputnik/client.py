@@ -90,6 +90,7 @@ class Client(Connection):
                     self.bouncer.datastore.add_channel(
                         self.network, channel[0], password)
                 self.forward(line)
+                self.forward("WHO", channel[0])
 
             elif l[0] == "PART":
 
