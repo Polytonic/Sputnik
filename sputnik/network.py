@@ -71,7 +71,7 @@ class Network(Connection):
         self.server_log = []
         self.chat_history = deque()
 
-        self.send("PASS", self.password or "")
+        self.send("PASS", self.password) if self.password else None
         self.send("NICK", self.nickname)
         self.send("USER", self.username, self.usermode, "*", self.realname)
 

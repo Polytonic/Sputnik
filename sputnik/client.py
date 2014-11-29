@@ -79,7 +79,7 @@ class Client(Connection):
 
                 self.network = l[1].split(" ")[0]
                 if self.network not in self.bouncer.networks:
-                    self.send("This Network Does Not Exist", "[C to D]")
+                    self.send("This Network Does Not Exist")
                 else: self.broker = self.bouncer.networks[self.network]
 
             elif l[0] == "JOIN":
