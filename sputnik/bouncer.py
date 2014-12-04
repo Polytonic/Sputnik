@@ -5,12 +5,12 @@ point, the Bouncer is responsible for bootstrapping the entire program.
 """
 
 import asyncio
+import os
 import redis
 from client import Client
 from datastore import Datastore
 from network import Network
 from server import HTTPServer
-
 
 class Bouncer(object):
     """A singleton that manages connected devices.
@@ -67,6 +67,9 @@ class Bouncer(object):
             port (int, optional): The port to listen on. Defaults to 6667.
         """
 
+        hport = int(os.getenv("RUPPELLS_SOCKETS_LOCAL_PORT"))
+        if hport: port = hport
+        
         loop = asyncio.get_event_loop()
         coro = loop.create_server(lambda: Client(self), hostname, port)
         loop.run_until_complete(coro)
