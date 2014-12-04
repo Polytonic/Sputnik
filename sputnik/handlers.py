@@ -86,6 +86,7 @@ class EditHandler(BaseHandler):
         network_name = self.get_argument("networkname")
         network_address = self.get_argument("networkaddress")
         nickname = self.get_argument("nickname")
+        realname = self.get_argument("realname")
         ident = self.get_argument("ident")
         password = self.get_argument("password")
         hostname, port = network_address.split(":")
@@ -94,8 +95,8 @@ class EditHandler(BaseHandler):
                                  hostname=hostname,
                                  port=port,
                                  nickname=nickname,
+                                 realname=realname,
                                  username=ident,
-                                 realname=ident,
                                  password=password)
 
         self.redirect("/")
