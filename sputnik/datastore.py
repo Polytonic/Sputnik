@@ -105,7 +105,7 @@ class Datastore(object):
         """
 
         password = self.get_password()
-        return bcrypt.hashpw(password_attempt.encode(), password) == password
+        return bcrypt.hashpw(password_attempt, password) == password
 
     def add_network(self, network, hostname, port,
                     nickname, username, realname,
