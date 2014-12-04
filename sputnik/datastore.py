@@ -8,6 +8,7 @@ ephemeral filesystems typical to most Platform-as-a-Service Providers (PaaS).
 
 import bcrypt
 import json
+import os
 import redis
 
 
@@ -19,7 +20,7 @@ class Datastore(object):
     It also holds persistent, shared variables, such as the Bouncer password.
 
     Attributes:
-        database (redis.StrictRedis): A Redis database connection.
+        database (redis.Redis): A Redis database connection.
     """
 
     def __init__(self, hostname, port):
@@ -32,7 +33,8 @@ class Datastore(object):
             port (int): A port for a Redis instance.
         """
 
-        self.database = redis.StrictRedis(host=hostname, port=port, db=0)
+        if hostname and port: redis_url = "redis://%s:%s" % (hostname, port)
+        self.database = redis.from_url(os.getenv("REDISTOGO_URL", redis_url))
 
     def get_networks(self):
         """Retrieves all connected networks from Redis.

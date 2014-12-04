@@ -1,0 +1,13 @@
+{
+    "name"        : "Sputnik",
+    "description" : "Lightweight IRC Bouncer",
+
+    "addons"      : ["papertrail", "redistogo", "ruppells-sockets"],
+    "keywords"    : ["python", "python3", "bouncer", "IRC"],
+
+    "repository"  : "https://github.com/Polytonic/Sputnik/",
+    "website"     : "http://polytonic.github.io/Sputnik/",
+
+    "scripts"     : { "postdeploy" : "cd docs && make dirhtml" },
+    "success_url" : "/"
+}

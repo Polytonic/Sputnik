@@ -71,7 +71,7 @@ class Client(Connection):
         perform actions as appropriate.
         """
 
-        for line in data.decode().rstrip().split("\r\n"):
+        for line in self.decode(data).rstrip().split("\r\n"):
             l = line.split(" ", 1)
 
             if   l[0] == "QUIT": pass  # Suppress the QUIT Command
@@ -79,7 +79,7 @@ class Client(Connection):
 
                 self.network = l[1].split(" ")[0]
                 if self.network not in self.bouncer.networks:
-                    self.send("This Network Does Not Exist", "[C to D]")
+                    self.send("This Network Does Not Exist")
                 else: self.broker = self.bouncer.networks[self.network]
 
             elif l[0] == "JOIN":
@@ -87,14 +87,17 @@ class Client(Connection):
                 for channel in l[1].split(","):
                     channel = channel.split(" ")
                     password = channel[1] if len(channel) > 1 else None
-                    self.bouncer.datastore.add_channel(
-                        self.network, channel[0], password)
+                    if self.bouncer.datastore:
+                        self.bouncer.datastore.add_channel(
+                            self.network, channel[0], password)
                 self.forward(line)
+                self.forward("WHO", channel[0])
 
             elif l[0] == "PART":
 
-                self.bouncer.datastore.remove_channel(
-                    self.network, l[1].split(" ")[0])
+                if self.bouncer.datastore:
+                    self.bouncer.datastore.remove_channel(
+                        self.network, l[1].split(" ")[0])
                 self.forward(line)
 
             else: self.forward(line)

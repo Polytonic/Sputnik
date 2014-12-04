@@ -71,14 +71,15 @@ class Network(Connection):
         self.server_log = []
         self.chat_history = deque()
 
-        self.send("PASS", self.password or "")
+        self.send("PASS", self.password) if self.password else None
         self.send("NICK", self.nickname)
         self.send("USER", self.username, self.usermode, "*", self.realname)
 
-        channels = self.bouncer.datastore.get_channels(self.network)
-        for channel_info, password in channels.items():
-            channel_name = channel_info.split(":")[1]
-            self.send("JOIN", channel_name, password or "")
+        if self.bouncer.datastore:
+            channels = self.bouncer.datastore.get_channels(self.network)
+            for channel_info, password in channels.items():
+                channel_name = channel_info.split(":")[1]
+                self.send("JOIN", channel_name, password or "")
 
     def attempt_reconnect(self, attempt=0, retries=5):
         """Attempts to reconnect to a network that unexpectedly disconnected.
@@ -125,7 +126,7 @@ class Network(Connection):
         and perform actions as appropriate.
         """
 
-        data = data.decode()
+        data = self.decode(data)
         if not data.endswith("\r\n"):
             self.linebuffer += data
             return
@@ -137,25 +138,21 @@ class Network(Connection):
             l = line.split(" ", 2)
             if   l[0] == "PING": self.send("PONG", l[1])
             elif l[1] == "PONG": self.forward("PONG", l[2])
+            elif l[1] == "NOTICE" or l[1] == "MODE":
+                if l[2].startswith("*"):
+                    self.server_log.append(line)
+                else:
+                    self.chat_history.append(line)
 
-            # elif l[1] == "NOTICE" or l[1] == "MODE":
-
-            #     self.server_log.append(line)
-            #     self.chat_history.append(line)
-
-            # elif l[1].isdigit() and (int(l[1]) in range(  1,   6)
-            #                     or   int(l[1]) in range(250, 256)
-            #                     or   int(l[1]) in range(265, 267)
-            #                     or   int(l[1]) in range(375, 377)
-            #                     or   int(l[1]) == 372):
-
-            #     self.server_log.append(line)
-            # do I need to send a WHO command on join?
-
-            else:
+            elif l[1].isdigit() and (int(l[1]) in range(  1,   6)
+                                or   int(l[1]) in range(250, 256)
+                                or   int(l[1]) in range(265, 267)
+                                or   int(l[1]) in range(375, 377)
+                                or   int(l[1]) == 372):
 
                 self.server_log.append(line)
-                self.chat_history.append(line)
+
+            else: self.chat_history.append(line)
 
         self.linebuffer = ""
 
