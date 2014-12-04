@@ -1,6 +1,6 @@
 [submodule "docs/_themes/sphinx_rtd_theme"]
 	path = docs/_themes/sphinx_rtd_theme
 	url = https://github.com/snide/sphinx_rtd_theme.git
-[submodule "sputnik/socket"]
-	path = sputnik/socket
+[submodule "sputnik/sockets-connect"]
+	path = sputnik/sockets-connect
 	url = https://bitbucket.org/ruppells/sockets-connect.git
