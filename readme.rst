@@ -57,4 +57,4 @@ License
 .. |Coverage Status| image:: http://img.shields.io/coveralls/Polytonic/Sputnik.svg?style=flat-square
    :target: https://coveralls.io/r/Polytonic/Sputnik
 .. |Deploy| image:: https://www.herokucdn.com/deploy/button.png
-   :target: https://heroku.com/deploy?template=https://github.com/Polytonic/Sputnik/
+   :target: https://heroku.com/deploy
