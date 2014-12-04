@@ -18,7 +18,11 @@ Sputnik is a Python IRC bouncer written using `asyncio`_ and backed by `Redis`_.
 Getting Started
 ---------------
 
+You can easily deploy a Sputnik instance on Heroku using the button below.
+
 |Deploy|
+
+Alternately, you can manually create and deploy your own Heroku app, or run Sputnik on your own computer or server. To do so requires a Python 3.4 interpreter and Redis (optional), if you want persistence between restarts or crashes.
 
 Documentation
 -------------
