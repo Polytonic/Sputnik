@@ -10,7 +10,7 @@ from client import Client
 from datastore import Datastore
 from network import Network
 from server import HTTPServer
-
+import os
 
 class Bouncer(object):
     """A singleton that manages connected devices.
