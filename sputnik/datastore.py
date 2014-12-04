@@ -81,7 +81,8 @@ class Datastore(object):
             str: The encrypted Bouncer password.
         """
 
-        return self.database.get("password=bouncer:password").decode()
+        password = self.database.get("password=bouncer:password")
+        return password.decode() if password else None
 
     def set_password(self, password="cosmonaut"):
         """Saves a new Bouncer password to Redis.
