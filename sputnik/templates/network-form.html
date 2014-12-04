@@ -1,6 +1,6 @@
 {% include network-setup.html %}
 
-<div class="server panel panel-default">
+<div class="sputnik-container panel panel-default">
     <div class="server-title panel-heading">
         <h3 class="panel-title">Network</h3>
     </div>
@@ -24,6 +24,13 @@
             <label for="nickname" class="col-lg-2 control-label">Nickname</label>
             <div class="col-lg-10">
                 <input type="text" class="form-control" name="nickname" value="{{ network_nickname }}" placeholder="Enter your nickname" required pattern="(\w+)" title="Alphanumeric characters only.">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="nickname" class="col-lg-2 control-label">Realname</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" name="realname" value="{{ network_realname }}" placeholder="Enter your real name" required pattern="(\w+)" title="Alphanumeric characters only.">
             </div>
         </div>
 

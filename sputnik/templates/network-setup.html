@@ -1,11 +1,13 @@
 {% if "network" in globals() or "network" in locals() %}
     {% set network_name = network.network %}
     {% set network_nickname = network.nickname %}
+    {% set network_realname = network.realname %}
     {% set network_username = network.username %}
     {% set network_address = network.hostname + ":" + str(network.port) %}
 {% else %}
     {% set network_name = "" %}
     {% set network_nickname = "" %}
+    {% set network_realname = "" %}
     {% set network_username = "" %}
     {% set network_address = "" %}
 {% end %}
