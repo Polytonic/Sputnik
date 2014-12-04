@@ -27,7 +27,7 @@ Alternately, you can manually create and deploy your own Heroku app, or run Sput
 Documentation
 -------------
 
-Sputnik documentation is built using `Sphinx`_ and publicly hosted at http://polytonic.github.io/Sputnik/. You can also build and serve the documentation locally.
+Sputnik documentation is built using `Sphinx`_ and publicly hosted at http://sputnik.readthedocs.org/. You can also build and serve the documentation locally.
 
 .. code:: sh
 
@@ -50,7 +50,7 @@ License
 
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-.. _Sputnik: http://polytonic.github.io/Sputnik/
+.. _Sputnik: https://github.com/Polytonic/Sputnik
 .. _asyncio: https://docs.python.org/3/library/asyncio.html
 .. _Redis: https://github.com/antirez/redis
 .. _Heroku: http://heroku.com
@@ -61,4 +61,4 @@ License
 .. |Coverage Status| image:: http://img.shields.io/coveralls/Polytonic/Sputnik.svg?style=flat-square
    :target: https://coveralls.io/r/Polytonic/Sputnik
 .. |Deploy| image:: https://www.herokucdn.com/deploy/button.png
-   :target: https://heroku.com/deploy
+   :target: https://heroku.com/deploy?template=https://github.com/Polytonic/Sputnik/

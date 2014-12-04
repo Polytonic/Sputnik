@@ -4,7 +4,3 @@
 [submodule "sputnik/sockets-connect"]
 	path = sputnik/sockets-connect
 	url = https://bitbucket.org/ruppells/sockets-connect.git
-[submodule "docs/_build/dirhtml"]
-	path = docs/_build/dirhtml
-	url = https://github.com/Polytonic/Sputnik.git
-	branch = gh-pages
