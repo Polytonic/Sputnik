@@ -45,7 +45,7 @@ class Network(Connection):
         self.username = username
         self.nickname = nickname
         self.password = password
-        self.realname = ":%s" % realname
+        self.realname = realname
         self.bouncer = bouncer
         self.network = network
         self.hostname = hostname
@@ -73,7 +73,8 @@ class Network(Connection):
 
         self.send("PASS", self.password) if self.password else None
         self.send("NICK", self.nickname)
-        self.send("USER", self.username, self.usermode, "*", self.realname)
+        self.send("USER", self.username, self.usermode, "*",
+                  ":%s" % self.realname)
 
         if self.bouncer.datastore:
             channels = self.bouncer.datastore.get_channels(self.network)

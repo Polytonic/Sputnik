@@ -4,6 +4,7 @@ This module provides Tornado Request Handlers for the Sputnik Web Interface.
 """
 
 import tornado.web
+import os
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -17,6 +18,12 @@ class BaseHandler(tornado.web.RequestHandler):
         """
 
         self.bouncer = bouncer
+
+        self.env = {}
+
+        self.env["connect_string"] = ":".join(filter(None,
+            [os.getenv("RUPPELLS_SOCKETS_FRONTEND_URI"),
+             os.getenv("RUPPELLS_SOCKETS_LOCAL_PORT")]))
 
     def get_current_user(self):
         return self.get_secure_cookie("user")
@@ -36,7 +43,7 @@ class MainHandler(BaseHandler):
         The home page displays the current list of networks.
         """
 
-        self.render("index.html", networks=self.bouncer.networks)
+        self.render("index.html", networks=self.bouncer.networks,  **self.env)
 
 
 class EditHandler(BaseHandler):
@@ -60,7 +67,7 @@ class EditHandler(BaseHandler):
         """
 
         network = self.bouncer.networks[network_name]
-        self.render("edit.html", network=network)
+        self.render("edit.html", network=network,  **self.env)
 
     @tornado.web.authenticated
     @tornado.web.addslash
@@ -79,6 +86,7 @@ class EditHandler(BaseHandler):
         network_name = self.get_argument("networkname")
         network_address = self.get_argument("networkaddress")
         nickname = self.get_argument("nickname")
+        realname = self.get_argument("realname")
         ident = self.get_argument("ident")
         password = self.get_argument("password")
         hostname, port = network_address.split(":")
@@ -87,8 +95,8 @@ class EditHandler(BaseHandler):
                                  hostname=hostname,
                                  port=port,
                                  nickname=nickname,
+                                 realname=realname,
                                  username=ident,
-                                 realname=ident,
                                  password=password)
 
         self.redirect("/")
@@ -127,7 +135,7 @@ class AddHandler(BaseHandler):
         complete with placeholder settings.
         """
 
-        self.render("add.html")
+        self.render("add.html",  **self.env)
 
     @tornado.web.authenticated
     @tornado.web.addslash
@@ -171,7 +179,7 @@ class LoginHandler(BaseHandler):
         The login page uses a form to ask the user for their password.
         """
 
-        self.render("login.html")
+        self.render("login.html",  **self.env)
 
     @tornado.web.addslash
     def post(self):
@@ -220,7 +228,7 @@ class SettingsHandler(BaseHandler):
         The settings page uses a form to allow users to change their password.
         """
 
-        self.render("settings.html")
+        self.render("settings.html",  **self.env)
 
     @tornado.web.authenticated
     @tornado.web.addslash
@@ -238,4 +246,4 @@ class SettingsHandler(BaseHandler):
         if self.bouncer.datastore.check_password(current) and new_1 == new_2:
             self.bouncer.datastore.set_password(new_1)
 
-        self.render("settings.html")
+        self.render("settings.html",  **self.env)

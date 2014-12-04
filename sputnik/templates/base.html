@@ -31,6 +31,12 @@
         </div>
     </div>
 
+    {% if connect_string %}
+    <div class="sputnik-connect-string panel panel-default">
+        {{ connect_string }}
+    </div>
+    {% end if %}
+
     {% block content %}{% end %}
 </div>
 

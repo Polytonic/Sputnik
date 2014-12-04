@@ -56,9 +56,14 @@ html, body {
     overflow: hidden;
 }
 
-.server {
+.sputnik-container {
     background-color: #F2E6B6;
     margin: 4px 0px 12px 0px;
+}
+
+.sputnik-connect-string {
+    background-color: #F2E6B6;
+    padding: 8px;
 }
 
 .server-container-initial {
