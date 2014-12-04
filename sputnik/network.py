@@ -139,6 +139,10 @@ class Network(Connection):
             l = line.split(" ", 2)
             if   l[0] == "PING": self.send("PONG", l[1])
             elif l[1] == "PONG": self.forward("PONG", l[2])
+            elif l[0] == "PRIVMSG" or l[1] == "PRIVMSG":
+
+                self.chat_history.append(line)
+
             else:
 
                 self.chat_history.append(line)
