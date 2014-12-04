@@ -18,12 +18,7 @@ class BaseHandler(tornado.web.RequestHandler):
         """
 
         self.bouncer = bouncer
-
-        self.env = {}
-
-        self.env["connect_string"] = ":".join(filter(None,
-            [os.getenv("RUPPELLS_SOCKETS_FRONTEND_URI"),
-             os.getenv("RUPPELLS_SOCKETS_LOCAL_PORT")]))
+        self.env = { "connect_string" : os.getenv("RUPPELLS_SOCKETS_FRONTEND_URI") }
 
     def get_current_user(self):
         return self.get_secure_cookie("user")
