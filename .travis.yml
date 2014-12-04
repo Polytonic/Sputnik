@@ -2,6 +2,8 @@ language: python
 python:
   - "3.4"
 install: pip install -r requirements.txt
+before_script:
+  - git submodule update --init --recursive
 script:
   - python3 -m unittest
 services:
