@@ -5,6 +5,7 @@ point, the Bouncer is responsible for bootstrapping the entire program.
 """
 
 import asyncio
+import redis
 from client import Client
 from datastore import Datastore
 from network import Network
@@ -37,9 +38,9 @@ class Bouncer(object):
         try: # Attempt a Datastore Connection
 
             self.datastore = Datastore(hostname="localhost", port="6379")
-            self.datastore.client_list()
+            self.datastore.database.ping()
 
-        except: # Continue Without Persistence
+        except redis.ConnectionError: # Continue Without Persistence
 
             self.datastore = None
             print("Failed to Connect to a Redis Instance.\n"

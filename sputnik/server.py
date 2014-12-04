@@ -39,7 +39,7 @@ class HTTPServer(tornado.web.Application):
                   (r"/?",              handlers.MainHandler,   route_dict)]
 
         tornado.platform.asyncio.AsyncIOMainLoop().install()
-        super().__init__(debug=os.environ.get("DEBUG"),
+        super().__init__(debug=os.getenv("DEBUG"),
                          handlers=routes,
                          static_path="sputnik/static",
                          template_path="sputnik/templates")
@@ -53,5 +53,5 @@ class HTTPServer(tornado.web.Application):
             port (int, optional): The port to listen on. Defaults to 8080
         """
 
-        port = os.environ.get("PORT", port)
+        port = os.getenv("PORT", port)
         tornado.httpserver.HTTPServer(self).listen(port)
