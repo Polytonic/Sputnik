@@ -17,5 +17,6 @@ deploy:
     secure: Gppdvp+GoGTcinM7cgTA8lGit9o2xJZQAnhZ9GknJFH51XfDVbP26HCZdhqK68KwY0EQjSo0mo2osCRc9ycM3bGq+mnHHrIzggxSsdH+9tbs61D6rsPS0gtY85jP/BNOd0dxlBpG2wunZ+WD4thQ6waKszbd1t+OyytrqIfF26Y=
   app:
     master: ganymede
+    development: iapetus
   on:
     repo: Polytonic/Sputnik
