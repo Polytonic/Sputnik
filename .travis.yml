@@ -14,6 +14,8 @@ after_success:
 deploy:
   provider: heroku
   api_key:
-    secure: BKkRNujx3WJDUYYN9AveUosG3QY8yYa0eg3zhKU+El8O+fWzju1aYK39YRXmkme6oUYgcRQY2TXy7l43LrZQKQ26wpntc75EQNQ4zzXqGfbR7aqS7S6MvEQ+Km4MmIEZyGMD+4wU6xQye3XRbqX0hlhpNp+pw+5439L2s7YvLFw=
+    secure: cqGXesHbnK3u42oQ/WgHjxzWQTRBlajqlbjl2DV33HHaQ+72xJKlw+3LDZoVFlunLrzDRqN4xyWmN7dTHyIkOhkDPZSaxfa84VSpBX19fHXJv8IJj13fyK6X1n/kipbEFQhosCV+Fuiz03f4bQ8xf9C6SSJ0T32F7uKABrFd/7Y=
   app:
     master: iapetus
+  on:
+    repo: Polytonic/Sputnik
