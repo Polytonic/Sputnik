@@ -5,9 +5,5 @@
     "keywords"    : ["python", "python3", "bouncer", "IRC"],
     "repository"  : "https://github.com/Polytonic/Sputnik/",
     "website"     : "http://polytonic.github.io/Sputnik/",
-    "success_url" : "/",
-    "scripts"     : {
-
-        "postdeploy" : "git submodule update --init --recursive"
-
-}}
+    "success_url" : "/"
+}
