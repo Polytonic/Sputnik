@@ -94,6 +94,19 @@ class Datastore(object):
         hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
         self.database.set("password=bouncer:password", hashed_password)
 
+    def check_password(self, password_attempt):
+        """Checks a password attempt against the Bouncer password.
+
+        Args:
+            password_attempt (str): The password attempt.
+
+        Returns:
+            bool: Whether the password matched.
+        """
+
+        password = self.get_password()
+        return bcrypt.hashpw(password_attempt.encode(), password) == password
+
     def add_network(self, network, hostname, port,
                     nickname, username, realname,
                     password=None, usermode=0):

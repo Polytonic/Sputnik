@@ -48,6 +48,9 @@ class Bouncer(object):
 
         if self.datastore:
 
+            if not self.datastore.get_password():
+                self.datastore.set_password()
+
             history = self.datastore.get_networks()
             for credentials in history.values():
                 self.add_network(**credentials)
