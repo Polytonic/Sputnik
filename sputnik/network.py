@@ -139,21 +139,10 @@ class Network(Connection):
             l = line.split(" ", 2)
             if   l[0] == "PING": self.send("PONG", l[1])
             elif l[1] == "PONG": self.forward("PONG", l[2])
-            elif l[1] == "NOTICE" or l[1] == "MODE":
-                if l[2].startswith("*"):
-                    self.server_log.append(line)
-                else:
-                    self.chat_history.append(line)
+            else:
 
-            elif l[1].isdigit() and (int(l[1]) in range(  1,   6)
-                                or   int(l[1]) in range(250, 256)
-                                or   int(l[1]) in range(265, 267)
-                                or   int(l[1]) in range(375, 377)
-                                or   int(l[1]) == 372):
-
+                self.chat_history.append(line)
                 self.server_log.append(line)
-
-            else: self.chat_history.append(line)
 
         self.linebuffer = ""
 
