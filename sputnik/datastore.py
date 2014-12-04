@@ -36,9 +36,6 @@ class Datastore(object):
         if hostname and port: redis_url = "redis://%s:%s" % (hostname, port)
         self.database = redis.from_url(os.getenv("REDISTOGO_URL", redis_url))
 
-        if not self.database.get("password=bouncer:password"):
-            self.set_password()
-
     def get_networks(self):
         """Retrieves all connected networks from Redis.
 
