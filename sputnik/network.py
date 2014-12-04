@@ -75,10 +75,11 @@ class Network(Connection):
         self.send("NICK", self.nickname)
         self.send("USER", self.username, self.usermode, "*", self.realname)
 
-        channels = self.bouncer.datastore.get_channels(self.network)
-        for channel_info, password in channels.items():
-            channel_name = channel_info.split(":")[1]
-            self.send("JOIN", channel_name, password or "")
+        if self.bouncer.datastore:
+            channels = self.bouncer.datastore.get_channels(self.network)
+            for channel_info, password in channels.items():
+                channel_name = channel_info.split(":")[1]
+                self.send("JOIN", channel_name, password or "")
 
     def attempt_reconnect(self, attempt=0, retries=5):
         """Attempts to reconnect to a network that unexpectedly disconnected.

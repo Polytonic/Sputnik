@@ -33,11 +33,23 @@ class Bouncer(object):
 
         self.clients = set()
         self.networks = dict()
-        self.datastore = Datastore(hostname="localhost", port="6379")
 
-        history = self.datastore.get_networks()
-        for credentials in history.values():
-            self.add_network(**credentials)
+        try: # Attempt a Datastore Connection
+
+            self.datastore = Datastore(hostname="localhost", port="6379")
+            self.datastore.client_list()
+
+        except: # Continue Without Persistence
+
+            self.datastore = None
+            print("Failed to Connect to a Redis Instance.\n"
+                  "Continuing Without Persistence.")
+
+        if self.datastore:
+
+            history = self.datastore.get_networks()
+            for credentials in history.values():
+                self.add_network(**credentials)
 
     def start(self, hostname="", port=6667):
         """Starts the IRC and HTTP listen servers.
@@ -90,7 +102,7 @@ class Bouncer(object):
                         "port"     : port,
                         "password" : password }
 
-        self.datastore.add_network(**credentials)
+        if self.datastore: self.datastore.add_network(**credentials)
         loop = asyncio.get_event_loop()
         coro = loop.create_connection(lambda: Network(self, **credentials),
                                       hostname, port)
@@ -109,4 +121,4 @@ class Bouncer(object):
         if network in self.networks:
             self.networks[network].connected = False
             self.networks[network].transport.close()
-        self.datastore.remove_network(network)
+        if self.datastore: self.datastore.remove_network(network)

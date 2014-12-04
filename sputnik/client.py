@@ -87,15 +87,17 @@ class Client(Connection):
                 for channel in l[1].split(","):
                     channel = channel.split(" ")
                     password = channel[1] if len(channel) > 1 else None
-                    self.bouncer.datastore.add_channel(
-                        self.network, channel[0], password)
+                    if self.bouncer.datastore:
+                        self.bouncer.datastore.add_channel(
+                            self.network, channel[0], password)
                 self.forward(line)
                 self.forward("WHO", channel[0])
 
             elif l[0] == "PART":
 
-                self.bouncer.datastore.remove_channel(
-                    self.network, l[1].split(" ")[0])
+                if self.bouncer.datastore:
+                    self.bouncer.datastore.remove_channel(
+                        self.network, l[1].split(" ")[0])
                 self.forward(line)
 
             else: self.forward(line)
