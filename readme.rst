@@ -31,7 +31,7 @@ Sputnik documentation is built using `Sphinx`_ and publicly hosted at http://pol
 
 .. code:: sh
 
-    pip install -r requirements.txt
+    git submodule update --init --recursive
     cd docs && make dirhtml && cd _build/dirhtml
     python -m SimpleHTTPServer
 
