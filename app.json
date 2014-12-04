@@ -7,7 +7,5 @@
 
     "repository"  : "https://github.com/Polytonic/Sputnik/",
     "website"     : "http://polytonic.github.io/Sputnik/",
-
-    "scripts"     : { "postdeploy" : "cd docs && make dirhtml" },
     "success_url" : "/"
 }
