@@ -67,11 +67,8 @@ class Bouncer(object):
             port (int, optional): The port to listen on. Defaults to 6667.
         """
 
-        hport = int(os.environ.get("RUPPELLS_SOCKETS_LOCAL_PORT"))
-        if(hport is not None):
-            print("Running on Heroku with Ruppels Sockets")
-            print(hport)
-            port = hport
+        hport = int(os.getenv("RUPPELLS_SOCKETS_LOCAL_PORT"))
+        if hport: port = hport
         
         loop = asyncio.get_event_loop()
         coro = loop.create_server(lambda: Client(self), hostname, port)
