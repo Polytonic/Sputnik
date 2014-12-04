@@ -70,9 +70,9 @@ class Bouncer(object):
             port (int, optional): The port to listen on. Defaults to 6667.
         """
 
-        hport = int(os.getenv("RUPPELLS_SOCKETS_LOCAL_PORT"))
-        if hport: port = hport
-        
+        hport = os.getenv("RUPPELLS_SOCKETS_LOCAL_PORT")
+        if hport: port = int(hport)
+
         loop = asyncio.get_event_loop()
         coro = loop.create_server(lambda: Client(self), hostname, port)
         loop.run_until_complete(coro)
