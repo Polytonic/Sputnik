@@ -134,15 +134,21 @@ class Datastore(object):
         key = "".join(["network=", network])
         self.database.set(key, json.dumps(credentials))
 
-    def remove_network(self, network):
+    def remove_network(self, network, hard=True):
         """Removes a network from Redis.
 
         Args:
             network (str): The name of a network to remove.
+            hard (bool): Hard remove (clear all associated channels).
         """
 
         key = "".join(["network=", network])
         self.database.delete(key)
+        if hard:
+            channels = self.get_channels(network)
+            for channel in channels.keys():
+                info = channel.split(":")
+                self.remove_channel(info[0], info[1])
 
     def add_channel(self, network, channel, password=""):
         """Adds a channel to the Redis.
