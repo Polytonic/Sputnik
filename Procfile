@@ -1,1 +1,1 @@
-web: ./sputnik/sockets-connect/rs-conn python3 sputnik
+web: ./sputnik/vendor/rs-conn python3 sputnik
