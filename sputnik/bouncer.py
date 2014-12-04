@@ -5,12 +5,12 @@ point, the Bouncer is responsible for bootstrapping the entire program.
 """
 
 import asyncio
+import os
 import redis
 from client import Client
 from datastore import Datastore
 from network import Network
 from server import HTTPServer
-import os
 
 class Bouncer(object):
     """A singleton that manages connected devices.
