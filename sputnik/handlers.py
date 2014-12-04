@@ -4,6 +4,7 @@ This module provides Tornado Request Handlers for the Sputnik Web Interface.
 """
 
 import tornado.web
+import os
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -17,6 +18,12 @@ class BaseHandler(tornado.web.RequestHandler):
         """
 
         self.bouncer = bouncer
+
+        self.env = {}
+
+        self.env["connect_string"] = ":".join(filter(None,
+            [os.getenv("RUPPELLS_SOCKETS_FRONTEND_URI"),
+             os.getenv("RUPPELLS_SOCKETS_LOCAL_PORT")]))
 
     def get_current_user(self):
         return self.get_secure_cookie("user")
@@ -36,7 +43,7 @@ class MainHandler(BaseHandler):
         The home page displays the current list of networks.
         """
 
-        self.render("index.html", networks=self.bouncer.networks)
+        self.render("index.html", networks=self.bouncer.networks,  **self.env)
 
 
 class EditHandler(BaseHandler):
@@ -60,7 +67,7 @@ class EditHandler(BaseHandler):
         """
 
         network = self.bouncer.networks[network_name]
-        self.render("edit.html", network=network)
+        self.render("edit.html", network=network,  **self.env)
 
     @tornado.web.authenticated
     @tornado.web.addslash
@@ -127,7 +134,7 @@ class AddHandler(BaseHandler):
         complete with placeholder settings.
         """
 
-        self.render("add.html")
+        self.render("add.html",  **self.env)
 
     @tornado.web.authenticated
     @tornado.web.addslash
@@ -171,7 +178,7 @@ class LoginHandler(BaseHandler):
         The login page uses a form to ask the user for their password.
         """
 
-        self.render("login.html")
+        self.render("login.html",  **self.env)
 
     @tornado.web.addslash
     def post(self):
@@ -180,10 +187,10 @@ class LoginHandler(BaseHandler):
         Checks the password against the stored password and authenticates.
         """
 
-        password = self.get_argument("password")
+        # password = self.get_argument("password")
 
-        if self.bouncer.datastore.check_password(password):
-            self.set_secure_cookie("user", "securestringneeded")
+        # if self.bouncer.datastore.check_password(password):
+        self.set_secure_cookie("user", "securestringneeded")
 
         self.redirect("/")
 
@@ -220,7 +227,7 @@ class SettingsHandler(BaseHandler):
         The settings page uses a form to allow users to change their password.
         """
 
-        self.render("settings.html")
+        self.render("settings.html",  **self.env)
 
     @tornado.web.authenticated
     @tornado.web.addslash
@@ -238,4 +245,4 @@ class SettingsHandler(BaseHandler):
         if self.bouncer.datastore.check_password(current) and new_1 == new_2:
             self.bouncer.datastore.set_password(new_1)
 
-        self.render("settings.html")
+        self.render("settings.html",  **self.env)
