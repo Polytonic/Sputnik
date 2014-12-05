@@ -1,5 +1,9 @@
 bcrypt>=1.0.x
 cffi>=0.8.x
+coverage>=3.7.x
+coveralls>=0.4.x
+flake8>=2.2.x
+prospector>=0.6.x
 redis>=2.10.x
 sphinx>=1.3b1
 tornado>=4.0.x
