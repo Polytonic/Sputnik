@@ -1,9 +1,12 @@
-bcrypt>=1.0.x
-cffi>=0.8.x
-coverage>=3.7.x
-coveralls>=0.4.x
-flake8>=2.2.x
-prospector>=0.6.x
-redis>=2.10.x
-sphinx>=1.3b1
-tornado>=4.0.x
+# Application Dependencies
+bcrypt==1.0.2
+cffi==0.8.6
+redis==2.10.3
+tornado==4.0.2
+
+# Development Dependencies
+coverage==3.7.1
+coveralls==0.4.4
+flake8==2.2.5
+prospector==0.7.4
+sphinx==1.3b1
