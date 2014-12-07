@@ -6,7 +6,7 @@ _RFC 2813: https://tools.ietf.org/html/rfc2813 .
 """
 
 from collections import deque
-from connection import Connection
+from sputnik.connection import Connection
 
 
 class Network(Connection):

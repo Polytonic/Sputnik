@@ -5,5 +5,5 @@ This implements the Sputnik main file, allowing users to run the Sputnik
 bouncer from the project root as a folder. e.g. `python3 sputnik`.
 """
 
-from bouncer import Bouncer
+from sputnik.bouncer import Bouncer
 Bouncer().start()

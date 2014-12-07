@@ -6,7 +6,7 @@ connect to and disconnect from networks.
 """
 
 import os
-import handlers
+import sputnik.handlers as handlers
 import tornado.web
 import tornado.httpserver
 import tornado.platform.asyncio

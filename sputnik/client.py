@@ -5,7 +5,7 @@ a Connection, and defines an interface to IRC client applications implementing
 _RFC 2812: https://tools.ietf.org/html/rfc2812 .
 """
 
-from connection import Connection
+from sputnik.connection import Connection
 
 
 class Client(Connection):
