@@ -1,6 +1,5 @@
 # Application Dependencies
-bcrypt==1.0.2
-cffi==0.8.6
+bcrypt==1.1.0
 redis==2.10.3
 tornado==4.0.2
 
