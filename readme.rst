@@ -1,7 +1,7 @@
 `Sputnik`_
 ==========
 
-|Build Status| |Coverage Status| |Dependency Status|
+|Build Status| |Coverage Status| |Dependency Status| |CodeClimate|
 
 Summary
 -------
@@ -14,8 +14,6 @@ Sputnik is a Python IRC bouncer written using `asyncio`_ and backed by `Redis`_.
 - Channel Saver
 - Buffered Message History
 - Multi-Client Connections
-
-Sputnik is *currently unmaintained* due to `new Heroku pricing <https://blog.heroku.com/archives/2015/5/7/new-dyno-types-public-beta>`_. In other words, Sputnik should now only be considered a proof-of-concept, rather than a production IRC bouncer. 
 
 Getting Started
 ---------------
@@ -66,3 +64,5 @@ License
    :target: https://gemnasium.com/Polytonic/Sputnik
 .. |Deploy| image:: https://www.herokucdn.com/deploy/button.png
    :target: https://heroku.com/deploy?template=https://github.com/Polytonic/Sputnik/
+
+.. |CodeClimate| image:: https://img.shields.io/codeclimate/github/Polytonic/Sputnik.svg?style=flat-square
